@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment / secrets — never commit API keys (Anthropic, etc.)
+.env
+.env.*
+!.env.example
+
+# Local vector store artifacts (Chroma / FAISS) — regenerable, not source
+.chroma/
+chroma/
+*.faiss
+*.index
+
+# Eval/observability run outputs are versioned deliberately under
+# evals/results and observability/traces; ignore only loose scratch files
+*.tmp
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+
+# Local Claude Code settings (machine-specific, not part of the artifact)
+.claude/settings.local.json

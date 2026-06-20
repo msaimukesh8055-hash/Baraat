@@ -14,8 +14,11 @@
 architecture, #7 structured output reliability (first pass), #3 spec-by-example
 
 ### Tasks
-- [ ] Generate synthetic vendor corpus per PRD.md §3 (~35 docs, deliberate
+- [x] Generate synthetic vendor corpus per PRD.md §3 (~35 docs, deliberate
       messiness built in, Phase-3-reserved docs clearly marked)
+      → 35 docs (7×5 categories) in data/vendors/; distribution 5 stale /
+        5 buried / 7 exact-match / 3 reserved; ground-truth in
+        data/vendors/_corpus_manifest.md (excluded from index)
 - [ ] Define and validate the structured output schema (PRD.md §4)
 - [ ] Build ingestion pipeline: chunking strategy decided + justified
 - [ ] Build embedding + vector store

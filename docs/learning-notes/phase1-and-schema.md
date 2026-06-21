@@ -61,6 +61,17 @@ every test would pass for the wrong reason.
   write *after* seeing the output isn't an eval, it's a rationalization.
 - ~8–10 questions in Phase 1, growing to 30–40 by Phase 4.
 
+> **Golden set ≠ corpus manifest — don't confuse them (I did, once):**
+> - **Corpus manifest** = answer key of *what's in each document* (true price,
+>   planted red flag, GST, per doc). Used to grade **extraction** ("did the JSON
+>   record match the doc?").
+> - **Golden set** = *user questions + expected answers*. Used to grade
+>   **retrieval / answering** ("did the system answer the user's question?").
+> - Two answer keys, two different evals. The golden set's answers are often
+>   *authored from* the manifest, but they are distinct artifacts. For checking
+>   **extraction content-correctness, the reference is the manifest**, not the
+>   golden set.
+
 ### 1d. The 3-stage retrieval improvement loop
 We run the **same** golden questions at every stage, so the only thing changing
 is the search method — that's what makes the before/after numbers trustworthy.

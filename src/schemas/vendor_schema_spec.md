@@ -71,11 +71,20 @@ distinct layers, and only the first two are checked by the schema:
    - `price_unit` consistent with `category` (caterer→per_plate, venue→per_day,
      others→package/per_event)
    - `gst_number` is null unless a GST actually appears in the source doc
-3. **Content correctness (the golden-set eval, NOT the schema):** did we capture
-   the *right* price, and did we catch the *buried* red flag? A record can be
-   perfectly schema-valid and still be wrong (e.g. `red_flags: []` for a vendor
-   that actually has a buried complaint). **Schema validation ≠ truth.** That gap
-   is exactly what the Phase 1 retrieval/extraction evals measure.
+3. **Content correctness (an eval against ground truth, NOT the schema):** did we
+   capture the *right* price, and did we catch the *buried* red flag? A record can
+   be perfectly schema-valid and still be wrong (e.g. `red_flags: []` for a vendor
+   that actually has a buried complaint). **Schema validation ≠ truth.** The
+   reference depends on *what* we're grading:
+   - **Extraction correctness** (this step) is graded against the **corpus
+     manifest** (`data/vendors/_corpus_manifest.md`) — the per-doc answer key of
+     true price, planted red flags, GST, etc. ("Did the record match the doc?")
+   - **Retrieval / answering correctness** (later) is graded against the **golden
+     set** of user questions + expected answers. ("Did the system answer the
+     user's question?")
+   These are distinct artifacts with distinct jobs; do not conflate them. The
+   golden set's answers are often *authored from* the manifest, but the manifest
+   is the master fact-sheet and the golden set is questions phrased on top of it.
 
 ---
 

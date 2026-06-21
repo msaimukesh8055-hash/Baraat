@@ -196,6 +196,50 @@ not a silent retry.** We'll deliberately trigger one later and log before/after.
 
 ---
 
+## 2g. WHEN do we test what — "detect & record now → use & answer later"
+
+A confusion I had: *"Why check stale-price / GST detection now? Doesn't that
+belong at the user-query level, after RAG is built?"* Answer: the same behaviour
+gets checked at **two different levels, for two different reasons** — and the
+check I did after extraction was NOT the user-query test.
+
+**The clean reframe:**
+- **Extraction's job (now):** *detect* that a price is stale and *record* it in
+  the field `price_confidence: "stale"`; *copy* the GST exactly into
+  `gst_number`. So "detection" actually happens at **extraction time**.
+- **The query layer's job (later):** when the user asks "is the price current?",
+  *use* that recorded field to *answer* them.
+
+So: **detect & record now → use & answer later.**
+
+**Two test levels, not redundant:**
+
+| | Component check (now) | End-to-end check (later) |
+|---|---|---|
+| Question | "Did extraction *record* the fact right?" | "Does the system *answer* the user right?" |
+| Tests | extraction (Track B) | retrieval + answer (whole system) |
+| Graded vs | corpus manifest | golden set |
+| When | right after building extraction | after RAG is built |
+
+**Why check the component now instead of waiting:**
+1. **Garbage in → garbage out.** Records feed everything downstream. If a price
+   was wrongly recorded `high`, no amount of good retrieval saves the answer.
+   Verify the input layer before building on it.
+2. **Fault isolation.** If a user-level answer is wrong later, was it extraction,
+   retrieval, or generation? Having checked extraction independently lets me
+   *rule it out* and localize the bug.
+
+**Analogy:** building a car. Extraction check = engine on a **test bench** (does
+it make power?). Query-level eval = **road test with a driver** (golden set).
+You don't skip the bench test because the road test is the "real" one — and if
+the road test fails, the bench result tells you whether to blame the engine.
+
+> Caveat: what I ran post-extraction was a quick **sanity spot-check** vs the
+> manifest, not the formal scored eval. The systematic Layer-3 evals come with
+> the golden set later.
+
+---
+
 ## 3. The proposed schema (status: awaiting my sign-off)
 
 Base from PRD §4, plus 4 proposed additions (each justified, not decoration):

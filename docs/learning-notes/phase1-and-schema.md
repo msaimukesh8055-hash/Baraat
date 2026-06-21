@@ -240,6 +240,42 @@ the road test fails, the bench result tells you whether to blame the engine.
 
 ---
 
+## 2h. How the extraction actually ran (script vs agent + reading the report)
+
+**It was a plain Python script, NOT an agent.** I ran one command
+(`python3 -m src.extraction.run_extraction`), which executed a fixed pipeline:
+for each doc → read → call the model (Groq) once → parse → validate → repair if
+needed → save. The model did ONE narrow job ("fill this JSON"); it did not decide
+the steps — the code did.
+
+**Script vs agent — the distinction (classic interview question):**
+
+| | Script / pipeline (this) | Agent (Phase 2) |
+|---|---|---|
+| Who decides the steps? | the programmer hardcodes them | the LLM decides, in a loop |
+| Control flow | fixed, predictable | dynamic (picks tools, decides when to stop) |
+| Guardrails (loop/tool budgets)? | minimal (a capped retry) | essential — the whole point |
+| Example | "read → extract → validate → save" | "should I call the budget tool? then compare? am I done?" |
+
+That's why `src/agent/` is empty right now — agents are Phase 2. The repair loop
+is NOT an agent: it's a fixed, capped retry, not the LLM choosing its own actions.
+
+**Reading the run report (two gotchas I hit):**
+- **`needs_human_review: False` is GOOD.** False = extraction succeeded, no human
+  needed. True = it failed and is flagged for a human. All-False = all 32 records
+  clean. The only place True appears is the deliberate mock-failure demo.
+- **`cached` rows are still real Groq output** — they were extracted in an earlier
+  run and reused (the resumable runner skips already-saved docs to avoid
+  re-spending tokens). Coverage was 32/32 via Groq; nothing skipped due to limits.
+
+**Rate-limit terms (Groq free tier = 12k tokens/min):**
+- **backoff** = on a 429, wait the time the API suggests, then retry.
+- **pacing** = wait ~11s between docs to stay under the per-minute limit.
+- **resumable runner** = save each record as it finishes; re-running continues
+  from where it stopped. (Slower, but never loses or re-pays for work.)
+
+---
+
 ## 3. The proposed schema (status: awaiting my sign-off)
 
 Base from PRD §4, plus 4 proposed additions (each justified, not decoration):

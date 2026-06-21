@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://baraat.example/schemas/vendor.schema.json",
+  "title": "Baraat Vendor Record",
+  "description": "The structured shape every messy vendor doc must resolve to after extraction. This is the machine-checkable contract; see vendor_schema_spec.md for plain-language rationale, worked examples, and cross-field rules that JSON Schema cannot express on its own.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "vendor_id",
+    "name",
+    "category",
+    "location",
+    "price_range_inr",
+    "price_unit",
+    "price_last_verified",
+    "price_confidence",
+    "contact",
+    "gst_number",
+    "rating",
+    "review_count",
+    "red_flags",
+    "source_file",
+    "needs_human_review",
+    "extraction_notes"
+  ],
+  "properties": {
+    "vendor_id": {
+      "type": "string",
+      "description": "Stable unique id, derived from the source filename slug.",
+      "pattern": "^(photographer|caterer|decorator|venue|makeup)_[a-z0-9_]+$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Business name exactly as it appears in the doc."
+    },
+    "category": {
+      "type": "string",
+      "enum": ["photographer", "caterer", "decorator", "venue", "makeup_artist"],
+      "description": "One of the five fixed vendor categories."
+    },
+    "location": {
+      "type": "string",
+      "minLength": 1,
+      "description": "City (and area if given)."
+    },
+    "price_range_inr": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["min", "max"],
+      "description": "Best current price estimate in INR. max may be null for open-ended 'and up' pricing. Cross-field rule (enforced in code): if both present, min <= max.",
+      "properties": {
+        "min": { "type": "number", "minimum": 0 },
+        "max": { "type": ["number", "null"], "minimum": 0 }
+      }
+    },
+    "price_unit": {
+      "type": "string",
+      "enum": ["per_plate", "per_day", "per_event", "package"],
+      "description": "What the price is measured per. Cross-field rule (enforced in code): caterer => per_plate; venue => per_day; photographer/decorator/makeup_artist => package or per_event."
+    },
+    "price_last_verified": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "description": "Date the price was last known good (YYYY-MM-DD), or null when no date is given or the price is stale."
+    },
+    "price_confidence": {
+      "type": "string",
+      "enum": ["high", "low", "stale"],
+      "description": "high = single uncontested current price; low = single but vague/undated/open-ended; stale = conflicting figures across dates or an explicit old 'as of' marker."
+    },
+    "contact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["phone", "email"],
+      "properties": {
+        "phone": { "type": "string" },
+        "email": { "type": ["string", "null"] }
+      }
+    },
+    "gst_number": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][0-9A-Z]Z[0-9A-Z]$",
+      "description": "15-char GST id if stated in the doc, else null. Never invent one: if the doc has no GST, this MUST be null."
+    },
+    "rating": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 5,
+      "description": "Star rating, 0.0 - 5.0."
+    },
+    "review_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "red_flags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Problems found (complaints, disputes, quality issues). Empty array if none — never omitted."
+    },
+    "source_file": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Filename this record was extracted from (attribution)."
+    },
+    "needs_human_review": {
+      "type": "boolean",
+      "description": "True only when validation could not be satisfied after repair attempts. NOTE: a stale price is NOT a human-review case — that is a successfully handled state."
+    },
+    "extraction_notes": {
+      "type": ["string", "null"],
+      "description": "Human-readable note explaining staleness, open-ended pricing, or why human review was flagged. Cross-field rule (enforced in code): if needs_human_review is true, this MUST be non-null."
+    }
+  }
+}

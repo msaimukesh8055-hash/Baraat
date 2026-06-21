@@ -1,0 +1,24 @@
+{
+  "vendor_id": "decorator_bloom_room",
+  "name": "The Bloom Room",
+  "category": "decorator",
+  "location": "Koramangala, Bengaluru",
+  "price_range_inr": {
+    "min": 200000,
+    "max": 450000
+  },
+  "price_unit": "package",
+  "price_last_verified": null,
+  "price_confidence": "high",
+  "contact": {
+    "phone": "+91 80887 22013",
+    "email": "hello@thebloomroom.example"
+  },
+  "gst_number": null,
+  "rating": 4.7,
+  "review_count": 101,
+  "red_flags": [],
+  "source_file": "decorator_bloom_room.md",
+  "needs_human_review": false,
+  "extraction_notes": null
+}

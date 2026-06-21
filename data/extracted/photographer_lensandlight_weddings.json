@@ -1,0 +1,24 @@
+{
+  "vendor_id": "photographer_lensandlight_weddings",
+  "name": "Lens & Light Weddings",
+  "category": "photographer",
+  "location": "Ambamata, Udaipur, Rajasthan",
+  "price_range_inr": {
+    "min": 320000,
+    "max": 320000
+  },
+  "price_unit": "package",
+  "price_last_verified": null,
+  "price_confidence": "high",
+  "contact": {
+    "phone": "+91 94151 99007",
+    "email": "book@lensandlightweddings.example"
+  },
+  "gst_number": "08AADLW7788K1Z2",
+  "rating": 4.6,
+  "review_count": 97,
+  "red_flags": [],
+  "source_file": "photographer_lensandlight_weddings.md",
+  "needs_human_review": false,
+  "extraction_notes": null
+}

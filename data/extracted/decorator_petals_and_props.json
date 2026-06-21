@@ -1,0 +1,28 @@
+{
+  "vendor_id": "decorator_petals_and_props",
+  "name": "Petals & Props",
+  "category": "decorator",
+  "location": "Lower Parel, Mumbai",
+  "price_range_inr": {
+    "min": 850000,
+    "max": 2000000
+  },
+  "price_unit": "package",
+  "price_last_verified": null,
+  "price_confidence": "low",
+  "contact": {
+    "phone": "+91 98203 31190",
+    "email": "studio@petalsandprops.example"
+  },
+  "gst_number": null,
+  "rating": 4.6,
+  "review_count": 74,
+  "red_flags": [
+    "logistics failure with imported florals",
+    "unnotified substitution of local flowers",
+    "unnotified scaling down of lighting rig"
+  ],
+  "source_file": "decorator_petals_and_props.md",
+  "needs_human_review": false,
+  "extraction_notes": "open-ended pricing, with packages starting at ₹8,50,000 and going past ₹20,00,000"
+}

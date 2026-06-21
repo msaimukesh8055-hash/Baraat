@@ -1,0 +1,24 @@
+{
+  "vendor_id": "caterer_grandthali_caterers",
+  "name": "Grand Thali Caterers",
+  "category": "caterer",
+  "location": "Pitampura, Delhi",
+  "price_range_inr": {
+    "min": 1250,
+    "max": 1650
+  },
+  "price_unit": "per_plate",
+  "price_last_verified": null,
+  "price_confidence": "high",
+  "contact": {
+    "phone": "+91 98180 77342",
+    "email": "events@grandthalicaterers.example"
+  },
+  "gst_number": "07AAGGT5521M1Z8",
+  "rating": 4.5,
+  "review_count": 264,
+  "red_flags": [],
+  "source_file": "caterer_grandthali_caterers.md",
+  "needs_human_review": false,
+  "extraction_notes": null
+}

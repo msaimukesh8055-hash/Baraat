@@ -1,0 +1,24 @@
+{
+  "vendor_id": "venue_heritage_haveli",
+  "name": "Heritage Haveli",
+  "category": "venue",
+  "location": "Old City, Jodhpur, Rajasthan",
+  "price_range_inr": {
+    "min": 550000,
+    "max": 550000
+  },
+  "price_unit": "per_day",
+  "price_last_verified": null,
+  "price_confidence": "high",
+  "contact": {
+    "phone": "+91 91610 33442",
+    "email": "stay@heritagehaveli.example"
+  },
+  "gst_number": null,
+  "rating": 4.8,
+  "review_count": 87,
+  "red_flags": [],
+  "source_file": "venue_heritage_haveli.md",
+  "needs_human_review": false,
+  "extraction_notes": null
+}

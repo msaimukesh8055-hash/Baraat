@@ -1,0 +1,28 @@
+{
+  "vendor_id": "caterer_anokhi_rasoi",
+  "name": "Anokhi Rasoi Catering Co.",
+  "category": "caterer",
+  "location": "Bani Park, Jaipur, Rajasthan",
+  "price_range_inr": {
+    "min": 1450,
+    "max": null
+  },
+  "price_unit": "per_plate",
+  "price_last_verified": "2023-11-01",
+  "price_confidence": "stale",
+  "contact": {
+    "phone": "+91 98290 41123",
+    "email": "bookings@anokhirasoi.example"
+  },
+  "gst_number": null,
+  "rating": 4.5,
+  "review_count": 212,
+  "red_flags": [
+    "Late setup for two December 2023 weddings",
+    "Ran short on the paneer course at one reception",
+    "Final invoice higher than signed quote for one client"
+  ],
+  "source_file": "caterer_anokhi_rasoi.md",
+  "needs_human_review": false,
+  "extraction_notes": "Price conflict between 2022 brochure (₹1,150 per plate) and recent enquiry sheet (₹1,450 per plate as of Nov 2023)"
+}

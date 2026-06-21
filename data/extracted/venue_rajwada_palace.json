@@ -1,0 +1,24 @@
+{
+  "vendor_id": "venue_rajwada_palace",
+  "name": "Rajwada Palace Banquets",
+  "category": "venue",
+  "location": "Tonk Road, Jaipur, Rajasthan",
+  "price_range_inr": {
+    "min": 525000,
+    "max": 525000
+  },
+  "price_unit": "per_day",
+  "price_last_verified": null,
+  "price_confidence": "stale",
+  "contact": {
+    "phone": "+91 98290 70011",
+    "email": "events@rajwadapalace.example"
+  },
+  "gst_number": null,
+  "rating": 4.6,
+  "review_count": 157,
+  "red_flags": [],
+  "source_file": "venue_rajwada_palace.md",
+  "needs_human_review": false,
+  "extraction_notes": "Conflicting prices: ₹3,50,000 (2021 rate sheet and wedding portal listing) vs ₹5,25,000 (recent enquiry email). Using the more recent figure."
+}

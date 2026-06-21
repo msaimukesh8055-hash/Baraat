@@ -1,0 +1,27 @@
+{
+  "vendor_id": "photographer_candidframes",
+  "name": "Candid Frames",
+  "category": "photographer",
+  "location": "Indiranagar, Bengaluru, Karnataka",
+  "price_range_inr": {
+    "min": 125000,
+    "max": 125000
+  },
+  "price_unit": "package",
+  "price_last_verified": null,
+  "price_confidence": "high",
+  "contact": {
+    "phone": "+91 96860 45512",
+    "email": "contact@candidframes.example"
+  },
+  "gst_number": null,
+  "rating": 4.5,
+  "review_count": 203,
+  "red_flags": [
+    "Delivered final album and full-length film 4-5 months late in at least three weddings in 2023",
+    "Lost raw footage from one couple's reception due to drive failure with no backup"
+  ],
+  "source_file": "photographer_candidframes.md",
+  "needs_human_review": false,
+  "extraction_notes": null
+}

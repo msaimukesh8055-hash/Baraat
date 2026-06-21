@@ -1,0 +1,24 @@
+{
+  "vendor_id": "decorator_royal_decor_studio",
+  "name": "Royal Decor Studio",
+  "category": "decorator",
+  "location": "Hiran Magri, Udaipur, Rajasthan",
+  "price_range_inr": {
+    "min": 275000,
+    "max": null
+  },
+  "price_unit": "package",
+  "price_last_verified": null,
+  "price_confidence": "low",
+  "contact": {
+    "phone": "+91 94140 77820",
+    "email": "studio@royaldecor-udaipur.example"
+  },
+  "gst_number": "08ABACR4567Q1Z9",
+  "rating": 4.7,
+  "review_count": 88,
+  "red_flags": [],
+  "source_file": "decorator_royal_decor_studio.md",
+  "needs_human_review": false,
+  "extraction_notes": "Open-ended pricing for full-venue floral decor"
+}

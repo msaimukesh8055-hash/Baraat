@@ -1,0 +1,26 @@
+{
+  "vendor_id": "photographer_pixelpandit",
+  "name": "Pixel Pandit Photography",
+  "category": "photographer",
+  "location": "Sector 29, Gurugram, Haryana",
+  "price_range_inr": {
+    "min": 140000,
+    "max": null
+  },
+  "price_unit": "package",
+  "price_last_verified": null,
+  "price_confidence": "stale",
+  "contact": {
+    "phone": "+91 99580 22119",
+    "email": "studio@pixelpandit.example"
+  },
+  "gst_number": null,
+  "rating": 4.4,
+  "review_count": 181,
+  "red_flags": [
+    "Communication was a little slow during peak season."
+  ],
+  "source_file": "photographer_pixelpandit.md",
+  "needs_human_review": false,
+  "extraction_notes": "Conflicting prices: ₹95,000 (2021 rate card) vs ₹1,40,000 (2024 social-media post)."
+}

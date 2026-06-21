@@ -1,0 +1,24 @@
+{
+  "vendor_id": "caterer_grandthali_events",
+  "name": "Grand Thali Events & Catering",
+  "category": "caterer",
+  "location": "Hazratganj, Lucknow, Uttar Pradesh",
+  "price_range_inr": {
+    "min": 1100,
+    "max": 1450
+  },
+  "price_unit": "per_plate",
+  "price_last_verified": null,
+  "price_confidence": "high",
+  "contact": {
+    "phone": "+91 94150 30876",
+    "email": "book@grandthalievents.example"
+  },
+  "gst_number": "09AAHGT9087L1Z4",
+  "rating": 4.7,
+  "review_count": 188,
+  "red_flags": [],
+  "source_file": "caterer_grandthali_events.md",
+  "needs_human_review": false,
+  "extraction_notes": null
+}

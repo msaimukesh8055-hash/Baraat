@@ -1,0 +1,24 @@
+{
+  "vendor_id": "caterer_annapurna_rasoi",
+  "name": "Annapurna Rasoi",
+  "category": "caterer",
+  "location": "Kothrud, Pune, Maharashtra",
+  "price_range_inr": {
+    "min": 1100,
+    "max": 1350
+  },
+  "price_unit": "per_plate",
+  "price_last_verified": null,
+  "price_confidence": "high",
+  "contact": {
+    "phone": "+91 90280 44551",
+    "email": "contact@annapurnarasoi.example"
+  },
+  "gst_number": null,
+  "rating": 4.5,
+  "review_count": 176,
+  "red_flags": [],
+  "source_file": "caterer_annapurna_rasoi.md",
+  "needs_human_review": false,
+  "extraction_notes": null
+}

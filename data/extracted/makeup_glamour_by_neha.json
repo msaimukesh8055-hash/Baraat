@@ -1,0 +1,24 @@
+{
+  "vendor_id": "makeup_glamour_by_neha",
+  "name": "Glamour by Neha",
+  "category": "makeup_artist",
+  "location": "Greater Kailash, Delhi",
+  "price_range_inr": {
+    "min": 45000,
+    "max": 75000
+  },
+  "price_unit": "package",
+  "price_last_verified": null,
+  "price_confidence": "stale",
+  "contact": {
+    "phone": "+91 98110 64422",
+    "email": "bookings@glamourbyneha.example"
+  },
+  "gst_number": null,
+  "rating": 4.7,
+  "review_count": 188,
+  "red_flags": [],
+  "source_file": "makeup_glamour_by_neha.md",
+  "needs_human_review": false,
+  "extraction_notes": "Conflicting prices: ₹45,000 (2022), ₹75,000 (2024), and ₹45,000 (third-party listing)."
+}

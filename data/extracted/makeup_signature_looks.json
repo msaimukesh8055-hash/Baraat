@@ -1,0 +1,24 @@
+{
+  "vendor_id": "makeup_signature_looks",
+  "name": "Signature Looks",
+  "category": "makeup_artist",
+  "location": "Sector 9, Chandigarh",
+  "price_range_inr": {
+    "min": 58000,
+    "max": 58000
+  },
+  "price_unit": "package",
+  "price_last_verified": null,
+  "price_confidence": "high",
+  "contact": {
+    "phone": "+91 97800 90015",
+    "email": "book@signaturelooks.example"
+  },
+  "gst_number": null,
+  "rating": 4.6,
+  "review_count": 135,
+  "red_flags": [],
+  "source_file": "makeup_signature_looks.md",
+  "needs_human_review": false,
+  "extraction_notes": null
+}

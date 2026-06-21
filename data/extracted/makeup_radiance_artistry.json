@@ -1,0 +1,24 @@
+{
+  "vendor_id": "makeup_radiance_artistry",
+  "name": "Radiance Artistry",
+  "category": "makeup_artist",
+  "location": "Aundh, Pune, Maharashtra",
+  "price_range_inr": {
+    "min": 50000,
+    "max": 50000
+  },
+  "price_unit": "package",
+  "price_last_verified": null,
+  "price_confidence": "high",
+  "contact": {
+    "phone": "+91 90280 67712",
+    "email": "hello@radianceartistry.example"
+  },
+  "gst_number": null,
+  "rating": 4.7,
+  "review_count": 128,
+  "red_flags": [],
+  "source_file": "makeup_radiance_artistry.md",
+  "needs_human_review": false,
+  "extraction_notes": null
+}

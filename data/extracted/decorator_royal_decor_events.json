@@ -1,0 +1,24 @@
+{
+  "vendor_id": "decorator_royal_decor_events",
+  "name": "Royal Decor & Events",
+  "category": "decorator",
+  "location": "Vaishali Nagar, Jaipur, Rajasthan",
+  "price_range_inr": {
+    "min": 240000,
+    "max": null
+  },
+  "price_unit": "package",
+  "price_last_verified": null,
+  "price_confidence": "low",
+  "contact": {
+    "phone": "+91 93140 22665",
+    "email": "contact@royaldecorevents.example"
+  },
+  "gst_number": "08AACRE3321P1Z6",
+  "rating": 4.5,
+  "review_count": 112,
+  "red_flags": [],
+  "source_file": "decorator_royal_decor_events.md",
+  "needs_human_review": false,
+  "extraction_notes": "Open-ended pricing for premium themed full-venue decor"
+}

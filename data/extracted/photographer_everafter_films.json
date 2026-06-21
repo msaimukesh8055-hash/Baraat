@@ -1,0 +1,24 @@
+{
+  "vendor_id": "photographer_everafter_films",
+  "name": "Ever After Films",
+  "category": "photographer",
+  "location": "Bandra West, Mumbai",
+  "price_range_inr": {
+    "min": 210000,
+    "max": 210000
+  },
+  "price_unit": "package",
+  "price_last_verified": null,
+  "price_confidence": "high",
+  "contact": {
+    "phone": "+91 98201 76654",
+    "email": "hello@everafterfilms.example"
+  },
+  "gst_number": null,
+  "rating": 4.9,
+  "review_count": 76,
+  "red_flags": [],
+  "source_file": "photographer_everafter_films.md",
+  "needs_human_review": false,
+  "extraction_notes": null
+}

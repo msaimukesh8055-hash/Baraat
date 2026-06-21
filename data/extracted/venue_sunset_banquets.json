@@ -1,0 +1,24 @@
+{
+  "vendor_id": "venue_sunset_banquets",
+  "name": "Sunset Banquets",
+  "category": "venue",
+  "location": "Rohini, Delhi",
+  "price_range_inr": {
+    "min": 380000,
+    "max": 380000
+  },
+  "price_unit": "per_day",
+  "price_last_verified": null,
+  "price_confidence": "high",
+  "contact": {
+    "phone": "+91 98184 21570",
+    "email": "book@sunsetbanquets.example"
+  },
+  "gst_number": null,
+  "rating": 4.4,
+  "review_count": 171,
+  "red_flags": [],
+  "source_file": "venue_sunset_banquets.md",
+  "needs_human_review": false,
+  "extraction_notes": null
+}

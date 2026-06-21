@@ -1,0 +1,24 @@
+{
+  "vendor_id": "decorator_marigold_mandap",
+  "name": "Marigold Mandap Decorators",
+  "category": "decorator",
+  "location": "Malviya Nagar, Jaipur, Rajasthan",
+  "price_range_inr": {
+    "min": 180000,
+    "max": 260000
+  },
+  "price_unit": "package",
+  "price_last_verified": null,
+  "price_confidence": "stale",
+  "contact": {
+    "phone": "+91 98291 56473",
+    "email": "hello@marigoldmandap.example"
+  },
+  "gst_number": null,
+  "rating": 4.4,
+  "review_count": 96,
+  "red_flags": [],
+  "source_file": "decorator_marigold_mandap.md",
+  "needs_human_review": false,
+  "extraction_notes": "Conflicting prices found: ₹1,80,000 in 2022 brochure and printed flyer, ₹2,60,000 in 2024 Instagram highlight."
+}

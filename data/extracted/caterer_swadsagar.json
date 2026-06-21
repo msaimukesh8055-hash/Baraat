@@ -1,0 +1,24 @@
+{
+  "vendor_id": "caterer_swadsagar",
+  "name": "Swad Sagar Caterers",
+  "category": "caterer",
+  "location": "Satellite, Ahmedabad, Gujarat",
+  "price_range_inr": {
+    "min": 1050,
+    "max": 1400
+  },
+  "price_unit": "per_plate",
+  "price_last_verified": null,
+  "price_confidence": "high",
+  "contact": {
+    "phone": "+91 99090 12233",
+    "email": "info@swadsagar.example"
+  },
+  "gst_number": null,
+  "rating": 4.6,
+  "review_count": 221,
+  "red_flags": [],
+  "source_file": "caterer_swadsagar.md",
+  "needs_human_review": false,
+  "extraction_notes": null
+}

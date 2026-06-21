@@ -1,0 +1,24 @@
+{
+  "vendor_id": "caterer_zaika_kitchens",
+  "name": "Zaika Kitchens",
+  "category": "caterer",
+  "location": "Tolichowki, Hyderabad, Telangana",
+  "price_range_inr": {
+    "min": 1150,
+    "max": 1500
+  },
+  "price_unit": "per_plate",
+  "price_last_verified": null,
+  "price_confidence": "high",
+  "contact": {
+    "phone": "+91 91000 78845",
+    "email": "book@zaikakitchens.example"
+  },
+  "gst_number": null,
+  "rating": 4.7,
+  "review_count": 243,
+  "red_flags": [],
+  "source_file": "caterer_zaika_kitchens.md",
+  "needs_human_review": false,
+  "extraction_notes": null
+}

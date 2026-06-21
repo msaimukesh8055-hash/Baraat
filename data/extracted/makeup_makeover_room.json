@@ -1,0 +1,24 @@
+{
+  "vendor_id": "makeup_makeover_room",
+  "name": "The Makeover Room",
+  "category": "makeup_artist",
+  "location": "Jubilee Hills, Hyderabad",
+  "price_range_inr": {
+    "min": 65000,
+    "max": 65000
+  },
+  "price_unit": "package",
+  "price_last_verified": null,
+  "price_confidence": "high",
+  "contact": {
+    "phone": "+91 91000 24489",
+    "email": "book@makeoverroom.example"
+  },
+  "gst_number": null,
+  "rating": 4.6,
+  "review_count": 147,
+  "red_flags": [],
+  "source_file": "makeup_makeover_room.md",
+  "needs_human_review": false,
+  "extraction_notes": null
+}

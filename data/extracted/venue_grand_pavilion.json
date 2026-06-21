@@ -1,0 +1,24 @@
+{
+  "vendor_id": "venue_grand_pavilion",
+  "name": "The Grand Pavilion",
+  "category": "venue",
+  "location": "HITEC City, Hyderabad, Telangana",
+  "price_range_inr": {
+    "min": 475000,
+    "max": 475000
+  },
+  "price_unit": "per_day",
+  "price_last_verified": null,
+  "price_confidence": "high",
+  "contact": {
+    "phone": "+91 90000 51277",
+    "email": "banquets@grandpavilion.example"
+  },
+  "gst_number": "36AAEGP2210R1Z3",
+  "rating": 4.6,
+  "review_count": 209,
+  "red_flags": [],
+  "source_file": "venue_grand_pavilion.md",
+  "needs_human_review": false,
+  "extraction_notes": null
+}

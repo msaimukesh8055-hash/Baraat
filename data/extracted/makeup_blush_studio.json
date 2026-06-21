@@ -1,0 +1,28 @@
+{
+  "vendor_id": "makeup_blush_studio",
+  "name": "Blush Studio",
+  "category": "makeup_artist",
+  "location": "Andheri West, Mumbai",
+  "price_range_inr": {
+    "min": 85000,
+    "max": 85000
+  },
+  "price_unit": "package",
+  "price_last_verified": null,
+  "price_confidence": "high",
+  "contact": {
+    "phone": "+91 98201 45567",
+    "email": "hello@blushstudio.example"
+  },
+  "gst_number": null,
+  "rating": 4.6,
+  "review_count": 164,
+  "red_flags": [
+    "Senior artist no-show on wedding day, replaced by junior team member without notice",
+    "Final look differed from trial in some cases",
+    "Additional 'peak-date surcharge' added to bill without prior agreement"
+  ],
+  "source_file": "makeup_blush_studio.md",
+  "needs_human_review": false,
+  "extraction_notes": null
+}

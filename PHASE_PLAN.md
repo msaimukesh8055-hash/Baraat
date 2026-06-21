@@ -19,7 +19,13 @@ architecture, #7 structured output reliability (first pass), #3 spec-by-example
       → 35 docs (7×5 categories) in data/vendors/; distribution 5 stale /
         5 buried / 7 exact-match / 3 reserved; ground-truth in
         data/vendors/_corpus_manifest.md (excluded from index)
-- [ ] Define and validate the structured output schema (PRD.md §4)
+- [x] Define and validate the structured output schema (PRD.md §4)
+      → schema in src/schemas/ (JSON Schema + spec-by-example); extractor with
+        validate→repair→fallback in src/extraction/; mock demo proves all 3
+        reliability paths; real run via Groq (llama-3.3-70b) extracted all 32
+        non-reserved docs (0 repairs, 0 fallbacks). Content vs manifest: stale
+        5/5, GST 6/6, buried red flags all surfaced, 1 false-positive (logged
+        F4). Records in data/extracted/.
 - [ ] Build ingestion pipeline: chunking strategy decided + justified
 - [ ] Build embedding + vector store
 - [ ] Build baseline retrieval (semantic-only)

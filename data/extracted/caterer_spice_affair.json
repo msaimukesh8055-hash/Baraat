@@ -1,0 +1,24 @@
+{
+  "vendor_id": "caterer_spice_affair",
+  "name": "Spice Affair Catering",
+  "category": "caterer",
+  "location": "Whitefield, Bengaluru, Karnataka",
+  "price_range_inr": {
+    "min": 1300,
+    "max": 1750
+  },
+  "price_unit": "per_plate",
+  "price_last_verified": null,
+  "price_confidence": "high",
+  "contact": {
+    "phone": "+91 80889 65120",
+    "email": "hello@spiceaffair.example"
+  },
+  "gst_number": null,
+  "rating": 4.6,
+  "review_count": 198,
+  "red_flags": [],
+  "source_file": "caterer_spice_affair.md",
+  "needs_human_review": false,
+  "extraction_notes": null
+}

@@ -1,0 +1,28 @@
+{
+  "vendor_id": "venue_emerald_gardens",
+  "name": "Emerald Gardens Resort",
+  "category": "venue",
+  "location": "Nelamangala, Bengaluru Rural, Karnataka",
+  "price_range_inr": {
+    "min": 600000,
+    "max": 600000
+  },
+  "price_unit": "per_day",
+  "price_last_verified": null,
+  "price_confidence": "high",
+  "contact": {
+    "phone": "+91 96860 90234",
+    "email": "weddings@emeraldgardens.example"
+  },
+  "gst_number": null,
+  "rating": 4.5,
+  "review_count": 142,
+  "red_flags": [
+    "Double-booking of on-site accommodation on peak dates",
+    "Last-minute reassignment of lawn space",
+    "Delayed refund of security deposit"
+  ],
+  "source_file": "venue_emerald_gardens.md",
+  "needs_human_review": false,
+  "extraction_notes": null
+}

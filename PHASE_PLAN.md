@@ -26,9 +26,16 @@ architecture, #7 structured output reliability (first pass), #3 spec-by-example
         non-reserved docs (0 repairs, 0 fallbacks). Content vs manifest: stale
         5/5, GST 6/6, buried red flags all surfaced, 1 false-positive (logged
         F4). Records in data/extracted/.
-- [ ] Build ingestion pipeline: chunking strategy decided + justified
-- [ ] Build embedding + vector store
-- [ ] Build baseline retrieval (semantic-only)
+- [x] Build ingestion pipeline: chunking strategy decided + justified
+      → paragraph-aware chunking w/ contextual vendor prefix (src/ingestion/
+        chunker.py); 32 docs → 204 chunks. Skips _-prefixed files.
+- [x] Build embedding + vector store
+      → local fastembed BAAI/bge-small-en-v1.5 (384-dim); simple NumPy cosine
+        store (src/retrieval/); index in data/index/.
+- [x] Build baseline retrieval (semantic-only)
+      → src/retrieval/search.py. Sanity queries already preview the planted
+        failures: simple lookups work; buried red flag + exact-match GST miss
+        (to be measured formally once golden questions exist).
 - [ ] Write first 8-10 golden questions covering exact-match and red-flag
       cases specifically
 - [ ] Run baseline retrieval against those questions — **capture real

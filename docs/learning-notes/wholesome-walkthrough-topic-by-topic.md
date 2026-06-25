@@ -6,7 +6,7 @@
 >
 > Topics:
 > 1. Extraction (DONE — below)
-> 2. Retrieval (to come)
+> 2. Retrieval (DONE — below)
 > 3. Golden dataset & evals (DONE — below)
 
 ---
@@ -114,6 +114,97 @@ manifest-comparison — which is exactly what Phase 4 builds later. The repeatab
 AI-PM skill on display: *design a schema, let the model fill it, validate
 mechanically (shape + rules), and handle the model's mistakes honestly (repair,
 then an explicit "needs human review" fallback) instead of trusting it blindly.*
+
+---
+
+## Topic 2 — Retrieval (finding the right text for a question)
+
+### 1. What this track does (and how it differs from extraction)
+Retrieval is the **"find and read"** track. Given a user's question, it fetches
+the most relevant passages from the corpus. It works on the **raw prose** — it
+never touches the JSON records from extraction. (Extraction = "compare and
+compute" on clean fields; retrieval = "find and read" the actual words. Two
+independent siblings built from the same 35 docs.)
+
+### 2. Step 1 — Chunking (cut docs into passages)
+- A whole document is too big to retrieve as one lump — a buried complaint would
+  get "averaged away" inside a mostly-positive page (the **lost-in-the-middle**
+  problem). So we cut each doc into smaller **chunks**.
+- **Paragraph-aware**, ~160 words max per chunk (not blind fixed-size cuts), so a
+  chunk is a coherent thought, not a sentence sliced in half.
+- Each chunk is tagged with a **vendor prefix** ("Vendor: {name} ({category}).
+  …") so the passage is self-describing even out of context.
+- Result on our corpus: **32 docs → 204 chunks** (avg ~6.4 per doc). Files
+  starting with `_` (manifest + Phase-3 reserved docs) are skipped.
+
+### 3. Step 2 — Embedding (turn text into meaning-numbers)
+- Each chunk is run through an **embedding model** that converts text into a list
+  of numbers (a **vector**) capturing its *meaning*. Similar meanings → vectors
+  that sit close together on a "map of meaning."
+- We use a **local** model (`BAAI/bge-small-en-v1.5`, 384 numbers per chunk).
+  Local because Groq has no embeddings endpoint, and local is free, offline, and
+  deterministic — no per-query API cost or network dependency for something this
+  small.
+
+### 4. Step 3 — Vector store (the searchable database of vectors)
+- All 204 chunk-vectors are stored in a simple **NumPy array** and saved to
+  `data/index/`.
+- Deliberately **not** FAISS/Chroma/Pinecone — at ~200 chunks, exact cosine
+  similarity over a NumPy array is simpler, dependency-light, and just as fast.
+  Those heavier tools are a documented *upgrade path* for when scale/persistence/
+  concurrency actually demand it. (Resisting over-engineering is itself the point.)
+
+### 5. Step 4 — Search (baseline = semantic only)
+```
+user question
+     │
+     ▼
+embed the question with the SAME model used to build the index
+     │
+     ▼
+query vector (384 numbers)
+     │
+     ▼
+cosine similarity vs all 204 chunk vectors  →  rank by closeness
+     │
+     ▼
+top-k chunks (k=5)   ← this is the retrieval OUTPUT
+```
+This is **baseline retrieval: semantic only** — search purely by *meaning*. No
+keyword matching, no reranking yet. It's Stage 1 of a planned 3-stage arc.
+
+### 6. The 3-stage improvement arc (and what each fixes)
+Each stage is measured on the **same golden questions** so the **recall@5 delta**
+is provable (this is where Topic 3's golden set plugs in):
+```
+Stage 1  BASELINE (semantic only)   — good at fuzzy meaning; BAD at exact
+                                       strings (GST/phone) and buries red flags
+Stage 2  + HYBRID (semantic+keyword) — adds exact word/char matching; fixes
+                                       exact-match & near-duplicate-name questions
+Stage 3  + RERANKING                 — smarter second pass re-orders top
+                                       candidates so the buried red flag rises
+```
+
+### 7. What breaks on baseline (the failures we expect to log)
+Semantic search is meaning-based, so two planted traps should fail at baseline —
+and we log the real failure *before* fixing it:
+- **Exact-match (GST / phone / near-duplicate names)** — semantic search is bad at
+  exact strings; "08ABACR4567Q1Z9" has no "meaning" to sit near. → fixed by
+  **hybrid** (Stage 2).
+- **Buried red flag** — a complaint hidden in a late paragraph of an otherwise
+  positive doc ranks low. → improved by **reranking** (Stage 3).
+
+### 8. How recall@5 plugs in here
+For each golden question, the **pre-marked gold chunk** is the passage that
+*should* be retrieved. Run the question through search; if the gold chunk is in
+the top 5 → hit. recall@5 = hits ÷ total questions. We compute it at baseline,
+then hybrid, then reranked — and the rising number is the evidence that each
+change actually helped (no "this should help," show the delta).
+
+> **Interview one-liner:** *"Retrieval is the find-and-read track over raw prose.
+> I chunk paragraph-aware to beat lost-in-the-middle, embed locally, search by
+> cosine similarity, and improve it in three measured stages — baseline → hybrid
+> → reranked — each proven with a recall@5 delta on a fixed golden set."*
 
 ---
 

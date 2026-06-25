@@ -63,6 +63,24 @@
   precisely why it's worth logging, not removing.
 - **Context:** on the real Groq run (32 non-reserved docs, model `llama-3.3-70b-versatile`, 0 repairs, 0 fallbacks, ~67k tokens), records were schema-valid. Checking content against `data/vendors/_corpus_manifest.md` surfaced nuances validation can't:
   - **False positive:** `photographer_pixelpandit` → `red_flags: ["Communication was a little slow during peak season."]`, but the manifest planted **no** red flag there. The model treats mild review criticism as a due-diligence red flag.
+  - **Where that phrase came from (NOT a hallucination):** the sentence is a real
+    review line in the source doc (`photographer_pixelpandit.md`, in the "What
+    couples say" section — one mildly negative quote among two glowing ones). Groq
+    copied it verbatim; the error is **misclassification, not fabrication** — it
+    promoted a minor review nitpick to a serious `red_flag`. The doc's *actual*
+    planted issue is **stale pricing** (₹95,000 in 2021 vs ₹1,40,000 in 2024), not
+    a red flag. So the model both invented a red flag AND that flag is a trivial
+    gripe, not a genuine warning sign (billing dispute, lost footage, late
+    delivery). This subtler failure — "can't tell a nitpick from a warning" — is a
+    more realistic and instructive bug than pure fabrication.
   - **Defensible judgment calls:** open-ended "from ₹X and up" pricing (royal_decor pair, lakeview, petals_and_props) → `price_confidence: low`. Consistent with our rules, but worth noting the boundary.
 - **Score (extraction vs manifest, Phase 1 baseline):** stale detection 5/5; GST exact-match 6/6; all 5 buried-red-flag docs surfaced their flags; **1 false-positive red flag** out of the clean-control set.
+- **How this was caught (honest provenance — don't overclaim):** the finding came
+  from an **assistant-run spot-check** during the session — reading the 32
+  extracted records against `_corpus_manifest.md` by eye — **not** from Saimukesh
+  personally doing the manual review, and **not** from a formal scored eval. The
+  plan says "Layer 3 = human (Saimukesh) checks vs manifest"; in reality this F4
+  was an informal assistant pass. **Still pending:** (1) Saimukesh personally
+  re-doing/owning the manual comparison (same discipline as owning the golden-set
+  answers), and (2) the systematic, scored Layer-3 eval (LLM-as-judge in Phase 4).
 - **Status:** logged, **not yet fixed** (per §3.1). Candidate fixes for later: a red-flag severity threshold, or prompt guidance distinguishing "serious issue" from "mild review gripe." This is the textbook demonstration that **schema-valid ≠ content-correct** — only grading against ground truth catches it.

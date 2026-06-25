@@ -55,6 +55,12 @@
   deterministic.
 
 ### F4 (content-correctness finding — Layer 3 vs the manifest) — over-eager red flags
+- **Not a validator bug — a different layer doing its job.** The automated Python
+  validator only checks SHAPE (format) and RULES (self-consistency); it
+  *structurally cannot* see whether a fact is true. Content correctness is a
+  separate, deliberate **Layer 3** (manual vs the manifest now; LLM-as-judge in
+  Phase 4). F4 is that Layer-3 check finding something layers 1–2 can't — which is
+  precisely why it's worth logging, not removing.
 - **Context:** on the real Groq run (32 non-reserved docs, model `llama-3.3-70b-versatile`, 0 repairs, 0 fallbacks, ~67k tokens), records were schema-valid. Checking content against `data/vendors/_corpus_manifest.md` surfaced nuances validation can't:
   - **False positive:** `photographer_pixelpandit` → `red_flags: ["Communication was a little slow during peak season."]`, but the manifest planted **no** red flag there. The model treats mild review criticism as a due-diligence red flag.
   - **Defensible judgment calls:** open-ended "from ₹X and up" pricing (royal_decor pair, lakeview, petals_and_props) → `price_confidence: low`. Consistent with our rules, but worth noting the boundary.

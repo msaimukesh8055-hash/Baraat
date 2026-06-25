@@ -136,6 +136,37 @@ questions.
 
 ---
 
+## 4. Correcting a wrong mental model: the "gold chunk" must be pre-marked
+
+A mistake I actually made: I described the gold chunk as "the chunk that shows up
+in the top 5" — i.e. defined by what retrieval returns. That's backwards, and
+it's circular: if the gold chunk is whatever retrieval returns, retrieval can
+never score below 100%, because you're grading it against its own output.
+
+```
+ ✗ WRONG:  run retrieval → look at the top 5 → call that "the gold chunk"
+           (circular — there is nothing left to fail)
+
+ ✓ RIGHT:  decide the gold chunk FIRST, from the manifest, before running
+           anything
+                │
+                ▼
+           THEN run retrieval
+                │
+                ▼
+           check: did the pre-decided gold chunk land in the top-k?
+           → that check is recall@k
+```
+
+**The rule:** the gold chunk is picked from ground truth (the manifest) at the
+time the golden question is *written*, independent of and prior to any
+retrieval run. Once it's fixed, it never changes based on what the system
+returns — otherwise the eval stops being honest (same logic as "I write the
+golden set's expected answers before seeing the system's output," §1c of the
+companion schema notes file).
+
+---
+
 ## Mini-recap
 - The system is a **pipeline**: retrieval output (chunks) and answer output (prose)
   are **two different things, graded two different ways.**

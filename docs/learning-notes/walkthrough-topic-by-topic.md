@@ -7,7 +7,7 @@
 > Topics:
 > 1. Extraction (DONE — below)
 > 2. Retrieval (to come)
-> 3. Golden dataset & evals (to come)
+> 3. Golden dataset & evals (DONE — below)
 
 ---
 
@@ -114,3 +114,87 @@ manifest-comparison — which is exactly what Phase 4 builds later. The repeatab
 AI-PM skill on display: *design a schema, let the model fill it, validate
 mechanically (shape + rules), and handle the model's mistakes honestly (repair,
 then an explicit "needs human review" fallback) instead of trusting it blindly.*
+
+---
+
+## Topic 3 — Golden dataset & evals (the honest exam)
+
+### 1. What it is, in one line
+A small, fixed set of **~10 questions, each with the correct answer pre-written**,
+that we use to **grade the system** — like an exam with an answer key written
+*before* the student sits it.
+
+### 2. What it's made FROM (and who owns the answers)
+- Built **from the manifest** (`_corpus_manifest.md`) — the ground-truth ledger of
+  what we planted in each doc. The manifest is the *textbook*; the golden set is
+  the *exam written from that textbook*.
+- **I (the human) own the answers**, written *before* seeing the system's output.
+  Claude can draft candidate questions (it knows where the traps are), but if I
+  wrote the answers *after* seeing the output, it wouldn't be an eval — it'd be a
+  rationalization.
+- It's a **curated sample**, not every possible question: deliberately targets the
+  known failure modes (simple lookup, exact-match GST/name, stale price, buried
+  red flag).
+
+### 3. Each entry has THREE parts (because there are two graders)
+This is the key detail. One question carries two different "correct" references:
+
+```
+GOLDEN ENTRY
+├── question          "Does Anokhi have any complaints?"
+├── expected answer   (prose) "Yes — a billing dispute / late setup is noted."
+└── gold chunk        the SPECIFIC correct passage, pre-marked from the manifest
+                       (Anokhi's complaint paragraph)
+```
+- The **expected answer** is for grading the final written reply.
+- The **gold chunk** is for grading retrieval — and it must be **decided up
+  front**, not read off whatever retrieval returns (otherwise the eval is
+  circular and can never fail).
+
+### 4. The two uses (two stages, two graders)
+```
+                          GOLDEN SET
+                              │
+            ┌─────────────────┴──────────────────┐
+            ▼                                     ▼
+  USE 1: grade RETRIEVAL                USE 2: grade the ANSWER
+  "did the gold chunk land             "is the written reply correct
+   in the top 5?"                       & grounded?"
+            │                                     │
+            ▼                                     ▼
+       recall@5                            LLM-AS-JUDGE
+   mechanical, no LLM,                  an LLM scores the prose
+   objective, runs NOW                  reply vs the expected answer
+   (Track A is built)                   (Phase 4 — not built yet)
+```
+- **Use 1 — recall@5 (now).** For each question, did the **pre-marked gold chunk**
+  appear in the top-5 retrieved chunks? Count the hits ÷ total = recall@5. Pure
+  mechanical check — no LLM, same score every time.
+- **Use 2 — LLM-as-judge (Phase 4).** Once the system *writes* answers, an LLM
+  grades each written answer against the expected answer. Needed because prose
+  can't be checked with `if`-statements — you need judgment.
+
+### 5. How it's used in the build (the eval engine)
+The golden set is the fixed yardstick for the whole **baseline → hybrid →
+reranking** arc. We run the **same** questions at every stage and report the
+**recall@5 delta**, so each improvement is *proven*, not asserted:
+```
+same golden questions ─► baseline   recall@5 = ?.??
+                      ─► + hybrid    recall@5 = ?.??   (delta logged)
+                      ─► + reranking recall@5 = ?.??   (delta logged)
+```
+Later (Phase 5) this same set powers the **CI eval gate**: if a code change drops
+the score below a threshold, the build fails — that's the regression-prevention
+mechanism, not just a one-time demo.
+
+### 6. Don't confuse it with the manifest (the two answer keys, again)
+- **Manifest** = facts about each doc, organized *by document*. Grades
+  **extraction**. Has no questions.
+- **Golden set** = questions + answers + gold chunks, organized *by question*.
+  Grades **retrieval/answering**. Written *from* the manifest, but a separate
+  artifact used in a separate track.
+
+> **Interview one-liner:** *"The golden set is my exam, authored from the manifest
+> before any run. Each question carries a pre-marked gold chunk for mechanical
+> recall@k and an expected answer for the LLM-judge — same set drives the
+> retrieval-improvement deltas and, later, the CI regression gate."*

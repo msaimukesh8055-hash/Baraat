@@ -22,12 +22,37 @@
 - **Lesson:** provider rate limits are a guardrail problem (preview of competency #8). Backoff + pacing + resumability turn a hard failure into a slow-but-reliable run.
 
 ### F3 (deliberate failure — reliability demo) — repair + fallback loop
-- **What we did on purpose:** with a `MockBackend` (no API key, deterministic), scripted three model behaviours and ran them through the real validate→repair→fallback logic:
-  - valid JSON → accepted first try
-  - invalid (`rating: 7.5`, `price_unit: per_day` for a caterer) → **repaired** with targeted errors, then accepted
-  - invalid every attempt → **fell back** to `needs_human_review: true` (never guessed)
-- **Result:** all three paths behaved as designed (`src/extraction/demo_mock.py`).
-- **Why it matters:** this is the competency #7 (structured-output reliability) artifact. Forcing the failure with a mock is *more* convincing than hoping the live model misbehaves — it's repeatable and free.
+- **Why we had to force it:** on the real Groq run, the model did its job *well* —
+  it extracted the right data and every record passed **both** Python validations
+  (SHAPE/format and RULES) on the first try. That's a good outcome, but it means
+  the **repair** and **fallback** safety nets *never fired* — so we had no proof
+  they actually work. You can't claim a safety net works if it was never tested.
+- **What we did on purpose:** we swapped in a `MockBackend` (no API key,
+  deterministic — it returns scripted "model" answers instead of calling Groq) and
+  **deliberately infused wrong values** into the records, specifically to see if
+  the validators catch them and the recovery logic behaves. Three scripted cases:
+  - **Case 1 — clean:** valid JSON → **accepted on the first try** (proves the
+    happy path doesn't false-alarm).
+  - **Case 2 — invalid, then repaired:** we injected two rule-breaking values —
+    `rating: 7.5` (the rule caps rating at **5.0**, so 7.5 is out of range) and
+    `price_unit: per_day` for a **caterer** (the rule says a caterer must be
+    `per_plate`). The Python validator caught both, the loop **sent the exact
+    errors back to the (mock) model asking for a fix**, the corrected record came
+    back valid, and it was **accepted**. (This is the "went back and asked for the
+    right answer" path.)
+  - **Case 3 — invalid every time, then fallback:** we scripted a record that
+    **stays wrong no matter how many times we ask**. After the capped retries (2)
+    it still failed validation, so instead of guessing it **fell back** to
+    `needs_human_review: true` with a note. (This is the "even after twice it's
+    still wrong → flag a human" path.)
+- **Result:** all three paths behaved exactly as designed
+  (`src/extraction/demo_mock.py`).
+- **Why it matters:** this is the competency #7 (structured-output reliability)
+  artifact. The point isn't that the model failed — it's that **when a model
+  fails, our system catches it, tries a bounded repair, and degrades honestly
+  instead of shipping garbage.** Forcing the failure with a mock is *more*
+  convincing than hoping the live model misbehaves — it's repeatable, free, and
+  deterministic.
 
 ### F4 (content-correctness finding — Layer 3 vs the manifest) — over-eager red flags
 - **Context:** on the real Groq run (32 non-reserved docs, model `llama-3.3-70b-versatile`, 0 repairs, 0 fallbacks, ~67k tokens), records were schema-valid. Checking content against `data/vendors/_corpus_manifest.md` surfaced nuances validation can't:

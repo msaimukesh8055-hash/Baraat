@@ -90,7 +90,21 @@
 ### F5 (retrieval eval — baseline) — recall@5 passes but exact-match quality fails
 
 - **Stage:** baseline semantic-only retrieval, 10 golden questions, k=5.
-- **Headline number:** recall@5 = **1.0 (10/10)** — gold doc in top 5 for every question.
+- **The metric trap:** the first headline number was recall@5 = **1.0 (10/10)** —
+  gold doc in top 5 for every question. This looked like a pass but is
+  **saturated**: baseline is already at the ceiling, so recall@5 literally *cannot*
+  show whether hybrid search helps. A metric that can't move is the wrong metric.
+- **Fix to the eval itself:** added two stricter, rank-sensitive metrics so the
+  hybrid improvement will be measurable:
+
+  | Metric | Baseline | What it measures | Headroom? |
+  |---|---|---|---|
+  | recall@5 | **1.0**  | gold doc anywhere in top 5 | none (saturated) |
+  | recall@1 | **0.80** | gold doc at **rank 1** | yes — Q08, Q09 fail |
+  | MRR      | **0.875**| avg of 1/rank (rank-sensitive) | yes |
+
+  The honest baseline to report and improve against is **recall@1 = 0.80,
+  MRR = 0.875**, not recall@5 = 1.0.
 - **Why this is misleading — the real failures are in ranking and disambiguation:**
 
   **Q08 — GST exact-match (gold rank: 4):**
@@ -124,10 +138,21 @@
   vendor's GST or phone number. **recall@k alone is insufficient for near-duplicate
   cases — precision and rank matter too.**
 
+- **Q06 — a THIRD near-duplicate the top-5 view had hidden (found only via the
+  stricter "other vendors in top-k" check):**
+  - Question: *"What is the current per-plate price at Anokhi Rasoi?"*
+  - Top-5: `anokhi_rasoi, annapurna_rasoi, anokhi_rasoi, anokhi_rasoi, anokhi_rasoi`
+  - Gold is rank 1 (good), but `caterer_annapurna_rasoi` also appears — "**Anokhi**
+    Rasoi" vs "**Annapurna** Rasoi" both contain "Rasoi" and sound alike. recall@5
+    and recall@1 both looked fine here; only inspecting *which other vendors* share
+    the top-k surfaced this latent confusability. Not a failure yet (gold is #1),
+    but a fragility worth tracking.
+
 - **Also noted:** multiple chunks from the same document appear in the top 5
   (Q09/Q10 show the same vendor_id 3× in 5 slots). Future improvement: deduplicate
   by vendor_id before returning top-k, so the 5 slots represent 5 distinct vendors.
 
 - **Motivates:** hybrid search (Stage 2) — keyword matching will exact-match GST/
-  phone strings and give city-based disambiguation weight, expected to fix Q08
-  ranking and reduce near-duplicate contamination in Q09/Q10.
+  phone strings and give city-based disambiguation weight. Expected deltas to
+  report: **recall@1 0.80 → ~1.0** (Q08 rank 4→1, Q09 rank 2→1) and a matching MRR
+  rise; recall@5 stays 1.0 (already saturated) and is kept only as a floor check.

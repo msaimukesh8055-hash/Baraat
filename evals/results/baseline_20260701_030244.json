@@ -1,9 +1,12 @@
 {
   "stage": "baseline",
   "k": 5,
-  "timestamp": "2026-07-01T02:45:20.786673",
+  "timestamp": "2026-07-01T03:02:44.698943",
   "recall_at_k": 1.0,
-  "hits": 10,
+  "recall_at_1": 0.8,
+  "mrr": 0.875,
+  "hits_at_k": 10,
+  "hits_at_1": 8,
   "total": 10,
   "per_question": [
     {
@@ -13,6 +16,7 @@
       "gold_doc": "photographer_everafter_films",
       "hit": true,
       "rank": 1,
+      "other_vendors_in_topk": [],
       "returned_docs": [
         "photographer_everafter_films",
         "photographer_everafter_films",
@@ -28,6 +32,7 @@
       "gold_doc": "caterer_swadsagar",
       "hit": true,
       "rank": 1,
+      "other_vendors_in_topk": [],
       "returned_docs": [
         "caterer_swadsagar",
         "caterer_swadsagar",
@@ -43,6 +48,7 @@
       "gold_doc": "photographer_candidframes",
       "hit": true,
       "rank": 1,
+      "other_vendors_in_topk": [],
       "returned_docs": [
         "photographer_candidframes",
         "photographer_candidframes",
@@ -58,6 +64,7 @@
       "gold_doc": "caterer_anokhi_rasoi",
       "hit": true,
       "rank": 1,
+      "other_vendors_in_topk": [],
       "returned_docs": [
         "caterer_anokhi_rasoi",
         "caterer_anokhi_rasoi",
@@ -73,6 +80,7 @@
       "gold_doc": "venue_emerald_gardens",
       "hit": true,
       "rank": 1,
+      "other_vendors_in_topk": [],
       "returned_docs": [
         "venue_emerald_gardens",
         "venue_emerald_gardens",
@@ -88,6 +96,9 @@
       "gold_doc": "caterer_anokhi_rasoi",
       "hit": true,
       "rank": 1,
+      "other_vendors_in_topk": [
+        "caterer_annapurna_rasoi"
+      ],
       "returned_docs": [
         "caterer_anokhi_rasoi",
         "caterer_annapurna_rasoi",
@@ -103,6 +114,7 @@
       "gold_doc": "venue_rajwada_palace",
       "hit": true,
       "rank": 1,
+      "other_vendors_in_topk": [],
       "returned_docs": [
         "venue_rajwada_palace",
         "venue_rajwada_palace",
@@ -118,6 +130,12 @@
       "gold_doc": "venue_grand_pavilion",
       "hit": true,
       "rank": 4,
+      "other_vendors_in_topk": [
+        "caterer_grandthali_caterers",
+        "caterer_grandthali_events",
+        "caterer_swadsagar",
+        "decorator_royal_decor_events"
+      ],
       "returned_docs": [
         "caterer_swadsagar",
         "caterer_grandthali_events",
@@ -129,31 +147,37 @@
     {
       "id": "Q09",
       "behavior": "exact_match_near_dup_name",
-      "question": "What is the GST number for Royal Decor Studio in Udaipur?",
+      "question": "There are two decorator vendors with Royal Decor in their name. What is the GST number of the one based in Udaipur?",
       "gold_doc": "decorator_royal_decor_studio",
       "hit": true,
-      "rank": 1,
+      "rank": 2,
+      "other_vendors_in_topk": [
+        "decorator_royal_decor_events"
+      ],
       "returned_docs": [
-        "decorator_royal_decor_studio",
         "decorator_royal_decor_events",
         "decorator_royal_decor_studio",
-        "decorator_royal_decor_events",
-        "decorator_royal_decor_studio"
+        "decorator_royal_decor_studio",
+        "decorator_royal_decor_studio",
+        "decorator_royal_decor_events"
       ]
     },
     {
       "id": "Q10",
       "behavior": "exact_match_near_dup_phone",
-      "question": "What is the phone number for Grand Thali Caterers in Delhi?",
+      "question": "There are two caterers with Grand Thali in their name. What is the contact phone number of the one operating out of Delhi?",
       "gold_doc": "caterer_grandthali_caterers",
       "hit": true,
       "rank": 1,
+      "other_vendors_in_topk": [
+        "caterer_grandthali_events"
+      ],
       "returned_docs": [
         "caterer_grandthali_caterers",
         "caterer_grandthali_events",
         "caterer_grandthali_caterers",
-        "caterer_grandthali_caterers",
-        "caterer_grandthali_events"
+        "caterer_grandthali_events",
+        "caterer_grandthali_caterers"
       ]
     }
   ]

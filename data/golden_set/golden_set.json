@@ -1,0 +1,72 @@
+[
+  {
+    "id": "Q01",
+    "behavior": "simple_lookup",
+    "question": "What's the package price for Ever After Films?",
+    "expected_answer": "₹2,10,000 package; Mumbai; clean record",
+    "gold_doc": "photographer_everafter_films"
+  },
+  {
+    "id": "Q02",
+    "behavior": "simple_lookup",
+    "question": "Where is Swad Sagar Caterers located and what do they charge?",
+    "expected_answer": "Ahmedabad; ₹1,050/plate veg",
+    "gold_doc": "caterer_swadsagar"
+  },
+  {
+    "id": "Q03",
+    "behavior": "buried_red_flag",
+    "question": "Have there been any problems with Candid Frames' delivery?",
+    "expected_answer": "Yes — 4–5 month late delivery (2023); raw reception footage partially lost, no backup",
+    "gold_doc": "photographer_candidframes"
+  },
+  {
+    "id": "Q04",
+    "behavior": "buried_red_flag",
+    "question": "Any complaints about Anokhi Rasoi's service on the wedding day?",
+    "expected_answer": "Yes — late setup ~90 min; ran short on paneer; invoice ~12% over signed quote",
+    "gold_doc": "caterer_anokhi_rasoi"
+  },
+  {
+    "id": "Q05",
+    "behavior": "buried_red_flag",
+    "question": "Were there any issues with Emerald Gardens Resort's bookings?",
+    "expected_answer": "Yes — rooms double-booked on peak dates; second lawn reassigned last-minute; deposit refunded only after repeated follow-ups",
+    "gold_doc": "venue_emerald_gardens"
+  },
+  {
+    "id": "Q06",
+    "behavior": "stale_freshness",
+    "question": "What is the current per-plate price at Anokhi Rasoi?",
+    "expected_answer": "Conflicting/stale: ₹1,150 (2022) vs ₹1,450/plate (Nov 2023) — newest is ₹1,450 but confirm in writing",
+    "gold_doc": "caterer_anokhi_rasoi"
+  },
+  {
+    "id": "Q07",
+    "behavior": "stale_freshness",
+    "question": "How much does Rajwada Palace Banquets cost per day?",
+    "expected_answer": "Conflicting/stale: ₹3,50,000 (2021) vs ₹5,25,000/day — confirm current rate before booking",
+    "gold_doc": "venue_rajwada_palace"
+  },
+  {
+    "id": "Q08",
+    "behavior": "exact_match_gst",
+    "question": "Which vendor has GST number 36AAEGP2210R1Z3?",
+    "expected_answer": "The Grand Pavilion, Hyderabad",
+    "gold_doc": "venue_grand_pavilion"
+  },
+  {
+    "id": "Q09",
+    "behavior": "exact_match_near_dup_name",
+    "question": "There are two decorator vendors with Royal Decor in their name. What is the GST number of the one based in Udaipur?",
+    "expected_answer": "08ABACR4567Q1Z9 (Royal Decor Studio, Udaipur) — NOT 08AACRE3321P1Z6 (Royal Decor & Events, Jaipur)",
+    "gold_doc": "decorator_royal_decor_studio"
+  },
+  {
+    "id": "Q10",
+    "behavior": "exact_match_near_dup_phone",
+    "question": "There are two caterers with Grand Thali in their name. What is the contact phone number of the one operating out of Delhi?",
+    "expected_answer": "+91 98180 77342 (Grand Thali Caterers, Delhi) — NOT +91 94150 30876 (Grand Thali Events & Catering, Lucknow)",
+    "gold_doc": "caterer_grandthali_caterers"
+  }
+]

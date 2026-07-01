@@ -84,3 +84,50 @@
   re-doing/owning the manual comparison (same discipline as owning the golden-set
   answers), and (2) the systematic, scored Layer-3 eval (LLM-as-judge in Phase 4).
 - **Status:** logged, **not yet fixed** (per §3.1). Candidate fixes for later: a red-flag severity threshold, or prompt guidance distinguishing "serious issue" from "mild review gripe." This is the textbook demonstration that **schema-valid ≠ content-correct** — only grading against ground truth catches it.
+
+---
+
+### F5 (retrieval eval — baseline) — recall@5 passes but exact-match quality fails
+
+- **Stage:** baseline semantic-only retrieval, 10 golden questions, k=5.
+- **Headline number:** recall@5 = **1.0 (10/10)** — gold doc in top 5 for every question.
+- **Why this is misleading — the real failures are in ranking and disambiguation:**
+
+  **Q08 — GST exact-match (gold rank: 4):**
+  - Question: *"Which vendor has GST number 36AAEGP2210R1Z3?"*
+  - Top-5 returned: `caterer_swadsagar, caterer_grandthali_events, decorator_royal_decor_events, venue_grand_pavilion, caterer_grandthali_caterers`
+  - The correct vendor (`venue_grand_pavilion`) is rank 4, behind 3 irrelevant vendors.
+  - **Root cause:** a GST string is a random alphanumeric code — it has no semantic
+    "meaning" for an embedding model to latch onto. Semantic search finds it
+    eventually (it's in the chunk text) but ranks it low because the question's
+    words don't semantically cluster near a venue's passage.
+  - **Fix:** hybrid/keyword search will exact-match the GST string and rank it 1st.
+
+  **Q09 — near-duplicate name (gold rank: 2, impostor also in top 5):**
+  - Question: *"Two decorators share Royal Decor — which is in Udaipur and what's its GST?"*
+  - Top-5: `royal_decor_events, royal_decor_studio, royal_decor_studio, royal_decor_studio, royal_decor_events`
+  - Both the correct vendor (Studio, Udaipur) **and** the wrong near-duplicate
+    (Events, Jaipur) fill the entire top 5. A downstream LLM sees both GST numbers
+    and may answer with the wrong one.
+
+  **Q10 — near-duplicate phone (gold rank: 1, impostor also in top 5):**
+  - Question: *"Two caterers share Grand Thali — what's the Delhi one's phone?"*
+  - Top-5: `grandthali_caterers, grandthali_events, grandthali_caterers, grandthali_events, grandthali_caterers`
+  - Same problem — both near-duplicates interleaved across all 5 slots.
+
+- **The key insight:** `recall@5 = 1.0` does not mean the retrieval is correct for
+  exact-match questions. The right document is technically *present*, but:
+  1. Ranked too low (Q08) — keyword search fixes ranking.
+  2. The impostor is *also* present (Q09, Q10) — disambiguation requires exact
+     string matching (GST/phone/city), not meaning-based similarity.
+  A downstream LLM working from these 5 chunks could easily answer with the wrong
+  vendor's GST or phone number. **recall@k alone is insufficient for near-duplicate
+  cases — precision and rank matter too.**
+
+- **Also noted:** multiple chunks from the same document appear in the top 5
+  (Q09/Q10 show the same vendor_id 3× in 5 slots). Future improvement: deduplicate
+  by vendor_id before returning top-k, so the 5 slots represent 5 distinct vendors.
+
+- **Motivates:** hybrid search (Stage 2) — keyword matching will exact-match GST/
+  phone strings and give city-based disambiguation weight, expected to fix Q08
+  ranking and reduce near-duplicate contamination in Q09/Q10.

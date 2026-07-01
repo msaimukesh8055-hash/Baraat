@@ -1,0 +1,160 @@
+{
+  "stage": "baseline",
+  "k": 5,
+  "timestamp": "2026-07-01T02:46:07.374940",
+  "recall_at_k": 1.0,
+  "hits": 10,
+  "total": 10,
+  "per_question": [
+    {
+      "id": "Q01",
+      "behavior": "simple_lookup",
+      "question": "What's the package price for Ever After Films?",
+      "gold_doc": "photographer_everafter_films",
+      "hit": true,
+      "rank": 1,
+      "returned_docs": [
+        "photographer_everafter_films",
+        "photographer_everafter_films",
+        "photographer_everafter_films",
+        "photographer_everafter_films",
+        "photographer_everafter_films"
+      ]
+    },
+    {
+      "id": "Q02",
+      "behavior": "simple_lookup",
+      "question": "Where is Swad Sagar Caterers located and what do they charge?",
+      "gold_doc": "caterer_swadsagar",
+      "hit": true,
+      "rank": 1,
+      "returned_docs": [
+        "caterer_swadsagar",
+        "caterer_swadsagar",
+        "caterer_swadsagar",
+        "caterer_swadsagar",
+        "caterer_swadsagar"
+      ]
+    },
+    {
+      "id": "Q03",
+      "behavior": "buried_red_flag",
+      "question": "Have there been any problems with Candid Frames' delivery?",
+      "gold_doc": "photographer_candidframes",
+      "hit": true,
+      "rank": 1,
+      "returned_docs": [
+        "photographer_candidframes",
+        "photographer_candidframes",
+        "photographer_candidframes",
+        "photographer_candidframes",
+        "photographer_candidframes"
+      ]
+    },
+    {
+      "id": "Q04",
+      "behavior": "buried_red_flag",
+      "question": "Any complaints about Anokhi Rasoi's service on the wedding day?",
+      "gold_doc": "caterer_anokhi_rasoi",
+      "hit": true,
+      "rank": 1,
+      "returned_docs": [
+        "caterer_anokhi_rasoi",
+        "caterer_anokhi_rasoi",
+        "caterer_anokhi_rasoi",
+        "caterer_anokhi_rasoi",
+        "caterer_anokhi_rasoi"
+      ]
+    },
+    {
+      "id": "Q05",
+      "behavior": "buried_red_flag",
+      "question": "Were there any issues with Emerald Gardens Resort's bookings?",
+      "gold_doc": "venue_emerald_gardens",
+      "hit": true,
+      "rank": 1,
+      "returned_docs": [
+        "venue_emerald_gardens",
+        "venue_emerald_gardens",
+        "venue_emerald_gardens",
+        "venue_emerald_gardens",
+        "venue_emerald_gardens"
+      ]
+    },
+    {
+      "id": "Q06",
+      "behavior": "stale_freshness",
+      "question": "What is the current per-plate price at Anokhi Rasoi?",
+      "gold_doc": "caterer_anokhi_rasoi",
+      "hit": true,
+      "rank": 1,
+      "returned_docs": [
+        "caterer_anokhi_rasoi",
+        "caterer_annapurna_rasoi",
+        "caterer_anokhi_rasoi",
+        "caterer_anokhi_rasoi",
+        "caterer_anokhi_rasoi"
+      ]
+    },
+    {
+      "id": "Q07",
+      "behavior": "stale_freshness",
+      "question": "How much does Rajwada Palace Banquets cost per day?",
+      "gold_doc": "venue_rajwada_palace",
+      "hit": true,
+      "rank": 1,
+      "returned_docs": [
+        "venue_rajwada_palace",
+        "venue_rajwada_palace",
+        "venue_rajwada_palace",
+        "venue_rajwada_palace",
+        "venue_rajwada_palace"
+      ]
+    },
+    {
+      "id": "Q08",
+      "behavior": "exact_match_gst",
+      "question": "Which vendor has GST number 36AAEGP2210R1Z3?",
+      "gold_doc": "venue_grand_pavilion",
+      "hit": true,
+      "rank": 4,
+      "returned_docs": [
+        "caterer_swadsagar",
+        "caterer_grandthali_events",
+        "decorator_royal_decor_events",
+        "venue_grand_pavilion",
+        "caterer_grandthali_caterers"
+      ]
+    },
+    {
+      "id": "Q09",
+      "behavior": "exact_match_near_dup_name",
+      "question": "There are two decorator vendors with Royal Decor in their name. What is the GST number of the one based in Udaipur?",
+      "gold_doc": "decorator_royal_decor_studio",
+      "hit": true,
+      "rank": 2,
+      "returned_docs": [
+        "decorator_royal_decor_events",
+        "decorator_royal_decor_studio",
+        "decorator_royal_decor_studio",
+        "decorator_royal_decor_studio",
+        "decorator_royal_decor_events"
+      ]
+    },
+    {
+      "id": "Q10",
+      "behavior": "exact_match_near_dup_phone",
+      "question": "There are two caterers with Grand Thali in their name. What is the contact phone number of the one operating out of Delhi?",
+      "gold_doc": "caterer_grandthali_caterers",
+      "hit": true,
+      "rank": 1,
+      "returned_docs": [
+        "caterer_grandthali_caterers",
+        "caterer_grandthali_events",
+        "caterer_grandthali_caterers",
+        "caterer_grandthali_events",
+        "caterer_grandthali_caterers"
+      ]
+    }
+  ]
+}

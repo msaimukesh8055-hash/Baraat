@@ -36,12 +36,21 @@ architecture, #7 structured output reliability (first pass), #3 spec-by-example
       → src/retrieval/search.py. Sanity queries already preview the planted
         failures: simple lookups work; buried red flag + exact-match GST miss
         (to be measured formally once golden questions exist).
-- [ ] Write first 8-10 golden questions covering exact-match and red-flag
+- [x] Write first 8-10 golden questions covering exact-match and red-flag
       cases specifically
-- [ ] Run baseline retrieval against those questions — **capture real
+      → 10 questions frozen in data/golden_set/golden_set.json (2 control,
+        3 buried, 2 stale, 3 exact-match)
+- [x] Run baseline retrieval against those questions — **capture real
       output, including failures**, log to failure-log.md
-- [ ] Add hybrid (keyword + semantic) search
-- [ ] Re-run same questions — log delta
+      → recall@5=1.0 was saturated/misleading; switched to recall@1=0.80,
+        MRR=0.875. Failures Q08 (rank 4), Q09 (rank 2) logged as F5.
+- [x] Add hybrid (keyword + semantic) search
+      → BM25 (src/retrieval/keyword_search.py) + RRF fusion
+        (src/retrieval/hybrid.py). Dependency-light, pure Python.
+- [x] Re-run same questions — log delta
+      → recall@1 0.80→0.90, MRR 0.875→0.95. Q08 GST rank 4→1 (keyword exact
+        match). Q09 survived (shared word "Udaipur" in both docs) → motivates
+        reranking. Logged as F6.
 - [ ] Add reranking
 - [ ] Re-run same questions — log delta
 - [ ] Document freshness handling approach for stale-price vendors

@@ -156,3 +156,48 @@
   phone strings and give city-based disambiguation weight. Expected deltas to
   report: **recall@1 0.80 → ~1.0** (Q08 rank 4→1, Q09 rank 2→1) and a matching MRR
   rise; recall@5 stays 1.0 (already saturated) and is kept only as a floor check.
+
+---
+
+### F6 (retrieval eval — hybrid, Stage 2) — keyword fixes GST, but a shared word defeats near-dup disambiguation
+
+- **What we built:** hybrid retrieval = the existing semantic (dense) search + a
+  from-scratch BM25 keyword search, fused with **Reciprocal Rank Fusion (RRF)**
+  (`src/retrieval/keyword_search.py`, `src/retrieval/hybrid.py`). RRF over raw score
+  addition because cosine (0–1) and BM25 (unbounded) live on different scales;
+  fusing by *rank* is scale-free.
+- **Measured delta (same 10 golden questions):**
+
+  | Metric | Baseline | Hybrid | Δ |
+  |---|---|---|---|
+  | recall@5 | 1.0 | 1.0 | — (saturated floor) |
+  | **recall@1** | **0.80** | **0.90** | **+0.10** |
+  | **MRR** | **0.875** | **0.95** | **+0.075** |
+
+- **Win — Q08 (GST lookup): rank 4 → rank 1.** The tokenizer keeps
+  `36AAEGP2210R1Z3` as one token; BM25 exact-matches it and RRF lifts it to #1.
+  This is the case pure semantic search *structurally* could not do (a random code
+  has no meaning to embed). Clean demonstration of *why* hybrid exists.
+- **Partial win — Q10 (Grand Thali near-dup):** the wrong Lucknow twin dropped from
+  interleaved (slots 2 & 4 at baseline) to a single slot at rank 4; gold now fills
+  4 of the top 5. Less impostor contamination, though not zero.
+- **Survived failure — Q09 (Royal Decor near-dup): still rank 2.** This is the
+  interesting one. The query asks for "the one **based in** Udaipur." But the word
+  "Udaipur" appears in **both** docs:
+  - `decorator_royal_decor_studio.md` — its real location (4 mentions).
+  - `decorator_royal_decor_events.md` — inside its disambiguation note: *"often
+    mistaken for Royal Decor Studio in **Udaipur**."*
+  So keyword matching on "Udaipur" **can't separate them** — both legitimately
+  contain the token. BM25 sees words, not roles; it cannot distinguish "located in
+  Udaipur" from "cross-references the Udaipur firm." The Jaipur impostor stays at
+  rank 1.
+- **The lesson (and what it motivates):** hybrid fixes *exact-string* retrieval
+  (Q08) but not *relational/semantic disambiguation* (Q09). When the discriminating
+  word is shared across both candidates, neither meaning-similarity nor keyword
+  overlap can rank them correctly. This is the textbook motivation for **Stage 3 —
+  reranking**: a cross-encoder scores the query and each chunk *together* and can
+  learn that "based in Udaipur" is a location claim, not a mention. Expected next
+  delta: Q09 rank 2 → 1, recall@1 0.90 → 1.0.
+- **Also observed:** duplicate chunks from the same vendor still fill multiple top-5
+  slots (Q10 shows gold 4×). Vendor-level dedup before returning top-k remains a
+  pending improvement (would also free slots to reveal/relegate impostors).

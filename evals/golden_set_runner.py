@@ -21,11 +21,17 @@ RESULTS_DIR = REPO_ROOT / "evals" / "results"
 
 sys.path.insert(0, str(REPO_ROOT))
 from src.retrieval.search import Retriever
+from src.retrieval.hybrid import HybridRetriever
+
+RETRIEVERS = {
+    "baseline": Retriever,       # semantic only
+    "hybrid": HybridRetriever,   # semantic + BM25 keyword, RRF-fused
+}
 
 
-def run_eval(k: int = 5, stage: str = "baseline") -> dict:
+def run_eval(k: int = 5, stage: str = "baseline", retriever_name: str = "baseline") -> dict:
     questions = json.loads(GOLDEN_SET_PATH.read_text())
-    retriever = Retriever()
+    retriever = RETRIEVERS[retriever_name]()
 
     results = []
     hits_at_k = 0      # gold doc anywhere in top-k  -> recall@k
@@ -118,10 +124,13 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--k", type=int, default=5)
     ap.add_argument("--stage", default="baseline", help="label for this run (baseline/hybrid/reranked)")
+    ap.add_argument("--retriever", default=None, choices=list(RETRIEVERS),
+                    help="which retriever to use (defaults to --stage if it names one)")
     ap.add_argument("--no-save", action="store_true", help="skip saving results to file")
     args = ap.parse_args()
 
-    report = run_eval(k=args.k, stage=args.stage)
+    retriever_name = args.retriever or (args.stage if args.stage in RETRIEVERS else "baseline")
+    report = run_eval(k=args.k, stage=args.stage, retriever_name=retriever_name)
     print_report(report)
     if not args.no_save:
         save_results(report, args.stage)

@@ -5,7 +5,11 @@
 > checked off — the sequencing is part of what makes this project teach
 > what it's supposed to teach (see CLAUDE.md §3.8).
 
-**Current Phase: 1 — RAG Core**
+**Current Phase: 1 — RAG Core → COMPLETE. Next: Phase 2 — Tools & Agent.**
+
+> Phase 1 done: extraction + 3-stage retrieval arc all built, measured, and
+> documented (see docs/phase1-results.md). Residual near-duplicate case (Q09)
+> diagnosed, fix deferred to metadata filtering. Ready to start Phase 2.
 
 ---
 
@@ -60,9 +64,15 @@ architecture, #7 structured output reliability (first pass), #3 spec-by-example
         adversarial phrase match). Decision: do NOT ship rerank; residual
         near-dup needs metadata filtering (extracted location field), not a
         better ranker. Logged as F7 (competency #15: right/wrong tool).
-- [ ] Document freshness handling approach for stale-price vendors
-- [ ] Write up Phase 1 results: recall/precision before vs after each
+- [x] Document freshness handling approach for stale-price vendors
+      → ADR 0002 (docs/decision-records/0002-freshness-handling.md):
+        detect→flag→don't-guess policy, 3 confidence levels, retrieval
+        support (Q06/Q07 rank 1), limitations.
+- [x] Write up Phase 1 results: recall/precision before vs after each
       change, with real numbers
+      → docs/phase1-results.md: extraction (32 docs, 0 repair/fallback,
+        content 5/5·6/6·5/5, 1 FP), retrieval arc (recall@1 0.80→0.90→0.90,
+        latency 5.7→6.5→223.7ms), F1–F7, judgments, honest gaps.
 
 ### Deliverable
 A retrieval pipeline with measured, documented improvement across 3 stages

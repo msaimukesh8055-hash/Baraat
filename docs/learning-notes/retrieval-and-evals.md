@@ -347,31 +347,53 @@ because it runs a transformer forward pass **once per candidate** (N passes), wh
 a bi-encoder embeds the query **once** and does cheap math against precomputed
 vectors. That gap *is* the tradeoff.
 
-### 8b. The knobs (what a PM actually tunes)
-- **N (how wide the net):** bigger N = better chance the right chunk is in the pool
-  = more forward passes = more latency/cost. Directly a cost↔accuracy dial.
-- **When to rerank at all:** don't rerank easy queries. If hybrid is already
-  confident (top scores far apart), skip the reranker; only spend it on *ambiguous*
-  queries (near-duplicates, close scores). This is **routing** (competency #9) —
-  pay for depth only where it changes the answer.
-- **Local vs hosted reranker:** local = $0 but uses your compute/latency budget;
-  hosted API (e.g. a Rerank endpoint) = simpler + faster hardware but per-call $ and
-  a network dependency. We'll go **local** (consistent with our no-API-key,
-  minimal-deps choices).
+### 8b. The four knobs, explained slowly (this is the part I need to *own*)
 
-### 8c. The tradeoffs, stated as a PM would
-1. **Latency vs accuracy.** Reranking adds the most latency of any stage and gives
-   the biggest gain on *hard relational* cases. Worth it only where accuracy beats
-   speed (due-diligence answers: yes; an autocomplete dropdown: no).
-2. **Cost vs accuracy.** Cost scales with N forward passes/query. Halve N → roughly
-   halve rerank cost, at some recall risk. A measurable dial, not a guess.
-3. **Graceful degradation.** If the reranker is slow/unavailable, fall back to the
-   hybrid ranking — a worse-but-fine answer beats a hang (previews competency #8
-   guardrails / degraded-mode UX).
-4. **Scaling.** At 204 chunks everything is instant, so this looks academic. At
-   1M chunks: semantic needs ANN, keyword needs an inverted index, and the
-   reranker's per-candidate cost becomes the bottleneck — you'd cap N hard and rerank
-   only routed-hard queries. The tradeoff gets *sharper* with scale, not softer.
+A **"knob"** = a setting I can turn up or down that trades **cost/speed** against
+**quality**. Reranking is expensive, so it comes with dials. There are four.
+
+**Knob 1 — N (how many chunks the reranker reads).**
+Hybrid hands the reranker a *shortlist*. N = how long that shortlist is (10? 20? 50?).
+- Turn N **up** (say 50): reranker reads 50 chunks → the right one is very likely in
+  there → better accuracy. **But** 50 chunks = 50 model runs = slower and costlier.
+- Turn N **down** (say 10): only 10 model runs = fast and cheap. **But** if the
+  correct chunk was at position 15, the reranker never sees it → miss.
+- So: **small N = cheap but risky; big N = accurate but expensive.** I pick where to set it.
+
+**Knob 2 — When to rerank (don't rerank *every* question).**
+Not every question needs the expensive reranker. From our own 10:
+- *"What's Ever After Films' price?"* → hybrid already nails it at rank 1.
+  Reranking here spends money and changes **nothing**. Waste.
+- *"Which Royal Decor firm is in Udaipur?"* → hard, ambiguous, hybrid got it **wrong**.
+  **This** one is worth reranking.
+- So: detect easy vs hard, and only pay for reranking on the **hard** ones. Like a
+  triage nurse — only serious cases go to the expensive specialist. (= "routing", #9.)
+
+**Knob 3 — Graceful degradation (what happens if the reranker breaks).**
+The reranker is a heavy component; it can be slow, crash, or (if hosted) be down.
+- **Bad design:** reranker hangs → whole system hangs → user gets **nothing**.
+- **Good design:** if it doesn't answer in ~2s, **fall back to the hybrid ranking**
+  (already 0.90 — pretty good). User gets a slightly-worse answer, not **no** answer.
+- Analogy: a broken escalator becomes **stairs** (still usable), never a **wall**.
+  (= "guardrail / degraded mode", competency #8.)
+
+**Knob 4 — Scaling (why this matters much more later).**
+Today = 204 chunks, everything instant, so this feels theoretical. Imagine **1M chunks**.
+- The reranker becomes a real **bottleneck**, because it does work *per candidate* —
+  feed it more, it gets slower.
+- So Knobs 1–3 (keep N small, only rerank hard questions, always have a fallback) stop
+  being "nice to have" and become **essential**.
+- The point: the cost/quality tradeoff **doesn't disappear as you grow — it gets more
+  painful.** Build the discipline now, while it's cheap to learn.
+
+> **One-sentence version:** reranking is expensive, so I control how many chunks it
+> reads (N), only run it on hard questions, keep a cheaper fallback if it breaks, and
+> know the whole thing gets tighter at scale.
+
+**Also — local vs hosted reranker (a related cost choice):** local = $0 but uses my
+own compute/latency budget; a hosted Rerank API = simpler + faster hardware but
+per-call $ and a network dependency. We'll go **local** (consistent with our
+no-API-key, minimal-deps choices).
 
 > Interview line: *"Reranking isn't a default — it's the most expensive stage
 > (a cross-encoder forward pass per candidate, ~10–100× hybrid's latency). I treat N

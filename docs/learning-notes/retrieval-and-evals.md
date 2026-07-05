@@ -242,6 +242,144 @@ formal record; this is the plain-language version for me.)*
 
 ---
 
+## 6. Hybrid search — what actually happened (Stage 2)
+
+We added a **keyword (BM25)** search next to the semantic one and fused the two.
+Semantic is meaning-only, so it's blind to exact strings (a GST code has no
+meaning); keyword rewards chunks that *literally contain* the query's rare words.
+Fused with **RRF** (Reciprocal Rank Fusion — combine by *rank*, not raw score, so
+the two different score scales don't fight).
+
+| Metric | Baseline | Hybrid | Δ |
+|---|---|---|---|
+| recall@1 | 0.80 | **0.90** | +0.10 |
+| MRR | 0.875 | **0.95** | +0.075 |
+| recall@5 | 1.0 | 1.0 | — (saturated) |
+
+- **Q08 (GST) fixed: rank 4 → 1** — keyword exact-matched `36AAEGP2210R1Z3`.
+- **Q09 (Royal Decor) survived at rank 2** — the word "Udaipur" is in *both* docs
+  (the Studio's real location AND the Events doc's note "often mistaken for … in
+  Udaipur"), so keyword overlap can't separate them. → motivates reranking. (F6.)
+
+---
+
+## 7. Reranking — the concept, BEFORE we build it (Stage 3)
+
+### 7a. The arc so far, in one line
+semantic (meaning) → missed exact strings → **added keyword = hybrid** → fixed the
+GST → still missed the *relational* case (Q09) → **reranker reads deeply**.
+
+### 7b. The core idea: cheap wide net, then expensive careful read
+Semantic + BM25 are **fast but shallow** — they score each chunk *cheaply and
+independently* and never actually read the query and a chunk *together*. That's why
+"Udaipur" in both docs fools them. A **reranker** adds a second, smarter pass over
+just the top candidates.
+
+### 7c. The REAL flow (note: reranker reads a WIDER pool than the final 5)
+The one correction I needed: the reranker does **not** work only on the final 5. If
+it did, it could only shuffle those 5 — never *rescue* a great chunk hybrid buried
+at position 8. Its value comes from reading a **wider** candidate pool.
+
+```
+        204 chunks
+            │
+   ┌────────▼─────────┐   FAST, shallow  (built)
+   │  hybrid search   │   semantic + BM25 + RRF
+   └────────┬─────────┘
+            │  cast a WIDE net → keep top ~20 candidates
+            ▼
+   ┌──────────────────┐   SLOW, deep  (Stage 3, new)
+   │    RERANKER      │   reads query + EACH chunk together,
+   │  (cross-encoder) │   re-scores all ~20, reorders them
+   └────────┬─────────┘
+            │  return the best 5, best one at rank 1
+            ▼
+        top 5 (reordered)
+```
+Sizes differ on purpose: **hybrid returns ~20 (cheap, big net); reranker deep-reads
+those 20 and returns the top 5.** Wide net → deep filter.
+
+### 7d. Bi-encoder vs cross-encoder (the heart of it)
+
+| | **Bi-encoder** (our embeddings) | **Cross-encoder** (the reranker) |
+|---|---|---|
+| Scores by | embedding query and chunk **separately**, then cosine | feeding query + chunk **together**, reading jointly |
+| Sees the query? | chunk was embedded **before it ever saw the query** | sees query and chunk **at the same time** |
+| Speed | very fast (chunk vectors precomputed once) | slow (fresh model run per query-chunk pair) |
+| Good at | "same topic" | "does this *specifically* answer this?" |
+
+**Dating analogy:** bi-encoder = comparing two profiles' checkboxes separately
+(fast, shallow); cross-encoder = putting the two people in a room and watching the
+conversation (accurate, but you can only afford it for the finalists). That "only
+the finalists" is *why* it's called **re**-ranking.
+
+### 7e. Why it should fix Q09
+The cross-encoder reads *"…the one based in Udaipur"* together with each chunk:
+- Studio chunk: "Location: … **Udaipur**" → this vendor **is** in Udaipur ✅
+- Events chunk: "often mistaken for … **in Udaipur**" → only *mentions* it to say
+  "not us" ❌
+
+It can tell a *location claim* from a *cross-reference*. Keyword/embeddings only see
+that the word is present. (We still **measure** it — it *should* flip Q09 to rank 1,
+recall@1 0.90 → 1.0, but the cross-encoder could also be fooled; no assuming.)
+
+---
+
+## 8. Cost & latency of each stage — the PM view (tradeoffs)
+
+The whole reason reranking is a *decision*, not a default: it is by far the most
+expensive stage. As PM I need to know what I'm buying and what I'm paying.
+
+### 8a. Cost / latency per stage
+> Numbers are order-of-magnitude on local CPU at our tiny scale (204 chunks). The
+> **relative ordering** and the **scaling story** are the point, not the absolutes;
+> precise measurement is a Phase-4 task (competency #11 latency engineering).
+
+| Stage | One-time (offline) work | Per-query latency | Per-query $ | Grows with |
+|---|---|---|---|---|
+| Semantic (bi-encoder) | embed all chunks **once** | ~10–50 ms (1 query embed + a matrix multiply) | $0 (local) | corpus size → needs an ANN index (FAISS) at scale |
+| Keyword (BM25) | tokenize + count **once** | <1–5 ms (pure arithmetic, no model) | $0 | corpus size → inverted index at scale |
+| Hybrid (both + RRF) | both of the above | ≈ semantic (the dominant term) + negligible fusion | $0 | both |
+| **Reranker (cross-encoder)** | none — **all work is at query time** | **N candidates × ~20–100 ms each ≈ 0.3–2 s for N=20 on CPU** | $0 local, **OR $ per call** if using a hosted reranker API | **candidate-pool size N** (the knob you control) |
+
+**The headline:** reranking can be **~10–100× the per-query latency** of hybrid,
+because it runs a transformer forward pass **once per candidate** (N passes), while
+a bi-encoder embeds the query **once** and does cheap math against precomputed
+vectors. That gap *is* the tradeoff.
+
+### 8b. The knobs (what a PM actually tunes)
+- **N (how wide the net):** bigger N = better chance the right chunk is in the pool
+  = more forward passes = more latency/cost. Directly a cost↔accuracy dial.
+- **When to rerank at all:** don't rerank easy queries. If hybrid is already
+  confident (top scores far apart), skip the reranker; only spend it on *ambiguous*
+  queries (near-duplicates, close scores). This is **routing** (competency #9) —
+  pay for depth only where it changes the answer.
+- **Local vs hosted reranker:** local = $0 but uses your compute/latency budget;
+  hosted API (e.g. a Rerank endpoint) = simpler + faster hardware but per-call $ and
+  a network dependency. We'll go **local** (consistent with our no-API-key,
+  minimal-deps choices).
+
+### 8c. The tradeoffs, stated as a PM would
+1. **Latency vs accuracy.** Reranking adds the most latency of any stage and gives
+   the biggest gain on *hard relational* cases. Worth it only where accuracy beats
+   speed (due-diligence answers: yes; an autocomplete dropdown: no).
+2. **Cost vs accuracy.** Cost scales with N forward passes/query. Halve N → roughly
+   halve rerank cost, at some recall risk. A measurable dial, not a guess.
+3. **Graceful degradation.** If the reranker is slow/unavailable, fall back to the
+   hybrid ranking — a worse-but-fine answer beats a hang (previews competency #8
+   guardrails / degraded-mode UX).
+4. **Scaling.** At 204 chunks everything is instant, so this looks academic. At
+   1M chunks: semantic needs ANN, keyword needs an inverted index, and the
+   reranker's per-candidate cost becomes the bottleneck — you'd cap N hard and rerank
+   only routed-hard queries. The tradeoff gets *sharper* with scale, not softer.
+
+> Interview line: *"Reranking isn't a default — it's the most expensive stage
+> (a cross-encoder forward pass per candidate, ~10–100× hybrid's latency). I treat N
+> and 'when to rerank' as cost↔accuracy knobs: cast a wide cheap net, deep-read only
+> a routed subset, and fall back to hybrid if the reranker is unavailable."*
+
+---
+
 ## Mini-recap
 - The system is a **pipeline**: retrieval output (chunks) and answer output (prose)
   are **two different things, graded two different ways.**
@@ -253,3 +391,10 @@ formal record; this is the plain-language version for me.)*
   numbers are **recall@1 = 0.80, MRR = 0.875**. Q08 (buried rank 4) and Q09 (wrong
   near-dup twin at rank 1) are what hybrid search must fix. "In the top 5" ≠
   "correct" — **rank and near-duplicate contamination matter too.**
+- **Hybrid result:** recall@1 0.80 → **0.90**, MRR → **0.95**. Keyword fixed the GST
+  (Q08); Q09 survived because "Udaipur" is in *both* docs.
+- **Reranking (next):** a **cross-encoder** reads a *wider* candidate pool (~20)
+  with the question in mind, then reorders to put the single best chunk at rank 1.
+  It's the **most expensive stage** (~10–100× hybrid latency, one model pass per
+  candidate) — so it's a *routed decision*, not a default. Cost/latency knobs: N
+  (net width) and *when* to rerank.

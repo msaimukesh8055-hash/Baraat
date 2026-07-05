@@ -167,6 +167,81 @@ companion schema notes file).
 
 ---
 
+## 5. The actual baseline run — and why recall@5 = 1.0 fooled me
+
+We ran the 10 golden questions through **baseline (semantic-only) retrieval**.
+First result: **recall@5 = 1.0** — every gold doc was somewhere in the top 5. Looks
+perfect. It isn't. Two lessons came out of this run.
+
+### 5a. What recall@5 vs recall@1 actually check
+- We don't string-match the *expected answer text* against chunks. We check
+  whether a chunk **from the correct document** (the gold doc, by `vendor_id`)
+  shows up. The expected answer is *my* ground truth; the gold *doc* is what
+  retrieval is graded against.
+- **recall@5** = did the right doc land *anywhere* in the top 5? → 10/10 = **1.0**
+- **recall@1** = did the right doc land at *rank 1* (the very first)? → 8/10 = **0.80**
+
+### 5b. Lesson 1 — a saturated metric can't show improvement
+recall@5 was already at the ceiling (1.0) on baseline. If it's maxed before I even
+add hybrid search, it **literally cannot go up** — so it can't prove hybrid helped.
+A metric that can't move is the wrong metric. So I added two stricter, rank-aware
+metrics that *do* have headroom:
+
+| Metric | Baseline | Measures | Room to improve? |
+|---|---|---|---|
+| recall@5 | **1.0**  | gold doc anywhere in top 5 | none (saturated) |
+| recall@1 | **0.80** | gold doc at **rank 1** | yes |
+| MRR      | **0.875**| avg of 1/rank (rank-sensitive) | yes |
+
+> Interview line: *"My first headline metric was saturated at 1.0 — it looked like
+> a pass but couldn't measure the very improvement I was about to make. I switched
+> to recall@1 and MRR, which had headroom, before claiming anything."*
+
+### 5c. Lesson 2 — "in the top 5" hides two different real failures
+The gold doc being *present* is not the same as retrieval being *correct*. Three
+exact-match questions show why:
+
+| Q | Type | Gold rank | The real problem |
+|---|---|---|---|
+| Q08 | GST lookup (want Grand Pavilion) | **4** | right doc **buried** behind 3 irrelevant vendors |
+| Q09 | Royal Decor (want **Udaipur**) | **2** | wrong twin (**Jaipur**, Royal Decor & Events) sits at rank 1 |
+| Q10 | Grand Thali (want **Delhi**) | **1** | right one is #1, but wrong twin (**Lucknow**) is right behind it |
+
+- **Q08 = a ranking problem.** A GST string (`36AAEGP2210R1Z3`) has no *meaning* for
+  an embedding model to grab, so semantic search ranks it low.
+- **Q09/Q10 = a disambiguation problem.** The two near-duplicate firms *sound the
+  same*, so meaning-based search returns **both** — a downstream LLM would see two
+  GSTs / two phone numbers and could pick the wrong one. We don't want the impostor
+  in the list at all.
+
+### 5d. The clean questions — and a hidden third near-duplicate (Q06)
+The other 7 were all **rank 1**. But Q06 hid a surprise that *only* the stricter
+"which other vendors are in the top 5?" view exposed:
+
+| Q | Type | Rank | Note |
+|---|---|---|---|
+| Q01–Q05 | lookups + buried red flags | 1 | clean ✅ (buried complaints *were* found) |
+| **Q06** | stale price (Anokhi Rasoi) | 1 | ⚠️ "**Annapurna** Rasoi" also appeared — sounds like "**Anokhi** Rasoi" |
+| Q07 | stale price (Rajwada Palace) | 1 | clean ✅ |
+
+Q06's gold is still rank 1, so it's not a failure — but it's a **third**
+near-duplicate pair we never planted on purpose, and both recall metrics looked
+perfect. Only inspecting the *other* vendors in the top 5 surfaced it. Logged as a
+fragility, not a failure.
+
+### 5e. The honest baseline scoreboard (what hybrid must beat)
+- **recall@5 = 1.0** — saturated, kept only as a floor check.
+- **recall@1 = 0.80** ← the real number to beat.
+- **MRR = 0.875** ← rank-sensitive, also has room.
+- The two things dragging recall@1 below 1.0 are exactly **Q08 (rank 4)** and
+  **Q09 (rank 2)** — both exact-match cases. That's precisely what hybrid (keyword +
+  semantic) should fix: **expected recall@1 0.80 → ~1.0**.
+
+*(All of this is also in `docs/failure-log.md` as F5 — the failure log is the
+formal record; this is the plain-language version for me.)*
+
+---
+
 ## Mini-recap
 - The system is a **pipeline**: retrieval output (chunks) and answer output (prose)
   are **two different things, graded two different ways.**
@@ -174,3 +249,7 @@ companion schema notes file).
   are mechanisms to **raise recall@k**, not to improve the written answer.
 - The **golden set** is the *exam* (questions + answers) — needed even though we
   have the manifest (the *textbook*), because only it is shaped as questions.
+- **Baseline result:** recall@5 = 1.0 was *saturated and misleading*; the honest
+  numbers are **recall@1 = 0.80, MRR = 0.875**. Q08 (buried rank 4) and Q09 (wrong
+  near-dup twin at rank 1) are what hybrid search must fix. "In the top 5" ≠
+  "correct" — **rank and near-duplicate contamination matter too.**

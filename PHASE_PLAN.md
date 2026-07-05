@@ -51,8 +51,15 @@ architecture, #7 structured output reliability (first pass), #3 spec-by-example
       → recall@1 0.80→0.90, MRR 0.875→0.95. Q08 GST rank 4→1 (keyword exact
         match). Q09 survived (shared word "Udaipur" in both docs) → motivates
         reranking. Logged as F6.
-- [ ] Add reranking
-- [ ] Re-run same questions — log delta
+- [x] Add reranking
+      → cross-encoder (Xenova/ms-marco-MiniLM-L-6-v2, local) with graceful
+        fallback to hybrid (src/retrieval/reranker.py).
+- [x] Re-run same questions — log delta
+      → NO improvement: recall@1 stayed 0.90, MRR 0.95, at ~34x latency
+        (6.5ms→223.7ms). Q09 survived (impostor's disambiguation note is an
+        adversarial phrase match). Decision: do NOT ship rerank; residual
+        near-dup needs metadata filtering (extracted location field), not a
+        better ranker. Logged as F7 (competency #15: right/wrong tool).
 - [ ] Document freshness handling approach for stale-price vendors
 - [ ] Write up Phase 1 results: recall/precision before vs after each
       change, with real numbers

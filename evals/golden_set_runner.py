@@ -22,10 +22,12 @@ RESULTS_DIR = REPO_ROOT / "evals" / "results"
 sys.path.insert(0, str(REPO_ROOT))
 from src.retrieval.search import Retriever
 from src.retrieval.hybrid import HybridRetriever
+from src.retrieval.reranker import RerankRetriever
 
 RETRIEVERS = {
-    "baseline": Retriever,       # semantic only
-    "hybrid": HybridRetriever,   # semantic + BM25 keyword, RRF-fused
+    "baseline": Retriever,        # semantic only
+    "hybrid": HybridRetriever,    # semantic + BM25 keyword, RRF-fused
+    "rerank": RerankRetriever,    # hybrid wide-net + cross-encoder rerank
 }
 
 

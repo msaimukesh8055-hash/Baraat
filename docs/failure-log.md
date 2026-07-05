@@ -201,3 +201,50 @@
 - **Also observed:** duplicate chunks from the same vendor still fill multiple top-5
   slots (Q10 shows gold 4×). Vendor-level dedup before returning top-k remains a
   pending improvement (would also free slots to reveal/relegate impostors).
+
+---
+
+### F7 (retrieval eval — reranking, Stage 3) — the expensive tool that DIDN'T help
+
+**This is the most instructive result of the retrieval arc, precisely because it
+went against the expectation.** We predicted reranking would flip Q09 (rank 2 → 1)
+and lift recall@1 to 1.0. We measured. It did not.
+
+- **What we built:** a cross-encoder reranker (`src/retrieval/reranker.py`,
+  `Xenova/ms-marco-MiniLM-L-6-v2`, local, ~80MB). It takes hybrid's top-N=20
+  candidates and re-scores each (query, chunk) pair *together*. Includes the
+  graceful-degradation guardrail (Knob 3): on any cross-encoder failure it falls
+  back to the hybrid ranking instead of crashing.
+- **Measured result (same 10 golden questions):**
+
+  | Stage | recall@1 | MRR | latency/query (CPU) |
+  |---|---|---|---|
+  | baseline (semantic) | 0.80 | 0.875 | 5.7 ms |
+  | hybrid (+ keyword) | 0.90 | 0.95 | 6.5 ms |
+  | **rerank (+ cross-encoder)** | **0.90** | **0.95** | **223.7 ms** |
+
+  Reranking = **no recall@1 or MRR improvement**, at **~34× the latency** of hybrid.
+- **Why Q09 survived even the cross-encoder — the key insight:** the reranker ranked
+  the *wrong* vendor (Royal Decor & Events, Jaipur) #1. That impostor doc contains a
+  disambiguation note: *"often mistaken for Royal Decor Studio **in Udaipur**."* The
+  query asks for "the one based **in Udaipur**." The note **literally contains the
+  query phrase**, so the cross-encoder — which is *supposed* to be the deep reader —
+  scored the impostor highest. The corpus's own realistic cross-reference is an
+  **adversarial lexical trap** that defeats semantic AND keyword AND cross-encoder
+  ranking. No ranker can win here, because the discriminating text points the *wrong*
+  way.
+- **The PM conclusion (competency #15 — when a technique is the WRONG tool):** on
+  this corpus, **reranking is not worth shipping** — 34× the latency for zero measured
+  accuracy gain. The honest recommendation is to **stop the retrieval arc at hybrid**
+  and solve the residual near-duplicate case a different way:
+  - **Metadata filtering** — filter candidates by the structured `location` field
+    ("Udaipur") from the **extracted records** (Track B). *This is where extraction
+    and retrieval finally connect:* the JSON we built for tool-math also disambiguates
+    near-duplicates that no text ranker can. A `city == "Udaipur"` filter removes the
+    Jaipur impostor entirely — something reranking cannot do.
+- **Was building it wasted?** No — the *negative result is the artifact*. "I built the
+  fancy stage, measured it, found +0% for +34× cost, diagnosed why, and chose not to
+  ship it" is a stronger portfolio story than a reranker that happened to help. It
+  demonstrates measure-don't-assume, cost/latency judgment, and root-cause diagnosis.
+- **Kept in the repo** as a working, swappable stage (`--retriever rerank`) so the
+  negative result is reproducible, not just asserted.

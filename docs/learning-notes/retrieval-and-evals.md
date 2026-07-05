@@ -323,6 +323,28 @@ It can tell a *location claim* from a *cross-reference*. Keyword/embeddings only
 that the word is present. (We still **measure** it — it *should* flip Q09 to rank 1,
 recall@1 0.90 → 1.0, but the cross-encoder could also be fooled; no assuming.)
 
+### 7f. What reranking ACTUALLY did — the surprise (and the best lesson)
+We built it and measured. **Reranking did NOT help.** recall@1 stayed **0.90**, MRR
+stayed **0.95**, Q09 stayed rank 2 — for **~34× the latency** (6.5 ms → 223.7 ms).
+
+Why the "deep reader" was *also* fooled: the reranker ranked the **wrong** vendor #1,
+because the impostor's doc says *"often mistaken for Royal Decor Studio **in
+Udaipur**."* The query asks for the one "based **in Udaipur**" — and that note
+**literally contains the query phrase.** So the cross-encoder scored the impostor
+highest. The corpus's own realistic cross-reference is an **adversarial trap** that
+beats semantic, keyword, AND cross-encoder ranking. No text ranker can win here.
+
+**The real fix isn't a better ranker — it's metadata filtering.** Use the structured
+`location` field from the **extracted records** (Track B) to filter `city ==
+"Udaipur"`, which deletes the Jaipur impostor outright. *This is the moment
+extraction and retrieval finally connect:* the JSON we built for tool-math also
+solves a retrieval problem no ranker could.
+
+**PM takeaway (competency #15 — when a technique is the WRONG tool):** I built the
+expensive stage, measured +0% for +34× cost, diagnosed the cause, and chose **not to
+ship it.** Stopping at hybrid + planning metadata filtering is the correct call. A
+negative result, measured and understood, is a stronger artifact than a lucky win.
+
 ---
 
 ## 8. Cost & latency of each stage — the PM view (tradeoffs)
@@ -415,8 +437,10 @@ no-API-key, minimal-deps choices).
   "correct" — **rank and near-duplicate contamination matter too.**
 - **Hybrid result:** recall@1 0.80 → **0.90**, MRR → **0.95**. Keyword fixed the GST
   (Q08); Q09 survived because "Udaipur" is in *both* docs.
-- **Reranking (next):** a **cross-encoder** reads a *wider* candidate pool (~20)
-  with the question in mind, then reorders to put the single best chunk at rank 1.
-  It's the **most expensive stage** (~10–100× hybrid latency, one model pass per
-  candidate) — so it's a *routed decision*, not a default. Cost/latency knobs: N
-  (net width) and *when* to rerank.
+- **Reranking (built & measured):** a **cross-encoder** reads a *wider* pool (~20)
+  with the question in mind. Expensive (~34× hybrid latency here: 223 ms vs 6.5 ms).
+  **Result: NO improvement** — recall@1 stayed 0.90, Q09 still rank 2, because the
+  impostor's doc literally contains the phrase "Royal Decor Studio in Udaipur" (an
+  adversarial cross-reference). **Chose not to ship it.** The residual near-duplicate
+  case needs **metadata filtering** (filter by the extracted `location` field), not a
+  better ranker — the point where Track B (extraction) finally helps Track A.

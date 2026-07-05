@@ -1,3 +1,5 @@
 # Core pipeline dependencies (stdlib covers the rest).
 numpy
 fastembed        # local ONNX embeddings (BAAI/bge-small-en-v1.5); no API key needed
+# Reranking (Stage 3): fastembed ships a local cross-encoder (TextCrossEncoder),
+# so no new dependency line is needed beyond fastembed already listed above.

@@ -87,19 +87,33 @@ addressed.
 (tool layer), #8 agent guardrails
 
 ### Tasks
-- [ ] Design tool schemas for all 4 tools in PRD.md §5 (input/output
+- [x] Design tool schemas for all 4 tools in PRD.md §5 (input/output
       contracts, argument validation rules)
-- [ ] Implement `budget_allocator`
-- [ ] Implement `contract_risk_checker`
-- [ ] Implement `payment_schedule_validator`
-- [ ] Implement `vendor_comparator` (multi-tool orchestration)
+      → src/tools/contracts.py (name, description, input/output JSON schema,
+        arg/output rules, failure modes). Step 1.
+- [x] Implement `budget_allocator`
+      → weight-normalized split; last category absorbs remainder (exact sum).
+- [x] Implement `contract_risk_checker`
+      → transparent regex/keyword scan w/ quoted evidence; false negatives
+        are the intended, measurable failure mode.
+- [x] Implement `payment_schedule_validator`
+      → schema rejects >100% instalments; flags high-upfront / not-100 /
+        majority-before-milestone.
+- [x] Implement `vendor_comparator` (multi-tool orchestration)
+      → pulls extracted records (Track B) for price/rating/red flags; first
+        real use of Phase 1 extraction.
 - [ ] Build retry/repair loop for malformed tool outputs
 - [ ] Deliberately trigger a malformed-output case — log to failure-log.md
-- [ ] Deliberately trigger an agent loop (e.g. comparator re-calling a tool
+- [x] Deliberately trigger an agent loop (e.g. comparator re-calling a tool
       unnecessarily) — implement and demonstrate a loop budget catching it
-- [ ] Implement tool budget (max tool calls per request) + stop condition
-- [ ] Document recovery path when a tool budget is exhausted (degraded
+      → src/agent/ orchestrator (explicit loop) + ScriptedPolicy; demo shows
+        runaway loop caught by repeat detection (F8, scenario B).
+- [x] Implement tool budget (max tool calls per request) + stop condition
+      → tool budget (5) + loop budget (6) + explicit finish stop condition
+        (F8, scenarios A/C/D).
+- [x] Document recovery path when a tool budget is exhausted (degraded
       response, not silent failure)
+      → degraded fallback returns a partial honest answer (F8, C/D).
 
 ### Deliverable
 A working tool layer where you can show: a malformed output being caught

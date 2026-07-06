@@ -248,3 +248,34 @@ and lift recall@1 to 1.0. We measured. It did not.
   demonstrates measure-don't-assume, cost/latency judgment, and root-cause diagnosis.
 - **Kept in the repo** as a working, swappable stage (`--retriever rerank`) so the
   negative result is reproducible, not just asserted.
+
+---
+
+## Phase 2 — Tools & Agent Orchestration
+
+### F8 (deliberate failures — agent guardrails) — runaway loop & budget exhaustion caught
+
+The agent is an explicit loop we own (`src/agent/orchestrator.py`), driven by a
+pluggable policy. As in Phase 1 (MockBackend proving the repair/fallback loop), we
+used a **ScriptedPolicy** to make the agent misbehave on purpose and showed each
+guardrail catching it (`python -m src.agent.demo_agent`). Budgets: loop=6, tool=5.
+
+| Scenario | What the agent did | Guardrail | Outcome |
+|---|---|---|---|
+| A. Good path | budget → contract → finish | stop condition | `finished`, 2 calls, clean |
+| B. Runaway loop | called `vendor_comparator` with identical args twice | repeat detection | `no_progress`, stopped at call 1 |
+| C. Over-calling | 6 distinct tool calls, never finishing | tool budget (5) | `tool_budget`, degraded partial answer |
+| D. Never finishing | never emits finish (tool budget raised) | loop budget (4) | `loop_budget`, degraded partial answer |
+
+- **The artifact:** in B, C, and D the agent would, unguarded, loop forever or
+  over-spend. Instead each returns a **degraded but honest partial answer** ("stopped:
+  … Partial results: …") — never a crash, never a hang, never silence.
+- **Why the pluggable policy matters:** forcing the failure with a scripted policy is
+  repeatable and free (same reasoning as Phase 1's mock). A real LLM policy drops into
+  the same orchestrator unchanged — the guardrails don't care where the Action came
+  from.
+- **Also demonstrated:** scenario B shows `vendor_comparator` correctly pulling
+  **extracted records** (Track B) — price/rating/red-flag count — and recommending the
+  better caterer. This is the first place Phase 1 extraction is *used*, not just built.
+- **Two layers of guarding now exist:** tool contracts guard each single call
+  (validate in/out); guardrails guard the whole sequence (budgets, stop, degrade).

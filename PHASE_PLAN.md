@@ -5,7 +5,13 @@
 > checked off — the sequencing is part of what makes this project teach
 > what it's supposed to teach (see CLAUDE.md §3.8).
 
-**Current Phase: 1 — RAG Core → COMPLETE. Next: Phase 2 — Tools & Agent.**
+**Current Phase: 2 — Tools & Agent → COMPLETE. Next: Phase 3 — Safety.**
+
+> Phase 2 done: 4 tools with input/output contracts, an explicit-loop agent with
+> four guardrails (loop/tool budget, stop, degraded fallback), a real LLM policy
+> (ask real questions via `python -m src.agent.ask`), and the tool-layer
+> repair loops. Artifacts F8 (guardrails), F9 (live self-correct), F10
+> (malformed-output repair). Ready for Phase 3.
 
 > Phase 1 done: extraction + 3-stage retrieval arc all built, measured, and
 > documented (see docs/phase1-results.md). Residual near-duplicate case (Q09)
@@ -106,12 +112,13 @@ addressed.
       questions; same orchestrator + guardrails, brain swapped
       → src/agent/llm_policy.py + src/agent/ask.py. Live tests: budget split,
         vendor comparison, payment-schedule risk all work (F9).
-- [~] Build retry/repair loop for malformed tool outputs
-      → the AGENT-level repair loop works live: model sent bad category args,
-        tool contract rejected them, error fed back, model self-corrected and
-        retried (F9). Still TODO: a deliberately-broken tool returning
-        malformed OUTPUT (not just bad args) to exercise output-repair.
-- [ ] Deliberately trigger a malformed-output case — log to failure-log.md
+- [x] Build retry/repair loop for malformed tool outputs
+      → execute_tool has a bounded output-repair loop (max_output_repairs); a
+        tool's repair_output() hook can fix malformed output, else it's caught.
+        Plus the live agent-level arg-repair (F9).
+- [x] Deliberately trigger a malformed-output case — log to failure-log.md
+      → src/tools/demo_malformed.py: broken (caught), flaky (repaired),
+        unfixable (bounded give-up). Mirrors F3 at the output layer. Logged F10.
 - [x] Deliberately trigger an agent loop (e.g. comparator re-calling a tool
       unnecessarily) — implement and demonstrate a loop budget catching it
       → src/agent/ orchestrator (explicit loop) + ScriptedPolicy; demo shows

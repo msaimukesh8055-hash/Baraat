@@ -25,7 +25,7 @@ def _envelope(name, ok, output, stage, errors):
     return {"tool": name, "ok": ok, "stage": stage, "output": output, "errors": errors}
 
 
-def execute_tool(tool, args: dict) -> dict:
+def execute_tool(tool, args: dict, max_output_repairs: int = 2) -> dict:
     contract = tool.CONTRACT
     name = contract["name"]
 
@@ -47,13 +47,32 @@ def execute_tool(tool, args: dict) -> dict:
     except Exception as e:  # pragma: no cover - defensive
         return _envelope(name, False, None, "run_error", [f"tool raised: {e!r}"])
 
-    # [4] output schema
-    errs = validate_against_schema(output, contract["output_schema"])
-    # [5] cross-field output rules
+    # [4]+[5] output schema + cross-field output rules, with a BOUNDED repair loop.
+    # If a tool exposes repair_output(args, prev_output, errors) and its output is
+    # malformed, we let it try to fix itself up to max_output_repairs times — the
+    # tool-layer analog of the Phase 1 extraction repair loop. If it still can't
+    # produce valid output, we return a caught failure (never pass garbage on).
     validate_output = getattr(tool, "validate_output", None)
-    if validate_output:
-        errs = errs + validate_output(args, output)
-    if errs:
-        return _envelope(name, False, output, "output_validation", errs)
+    repair_output = getattr(tool, "repair_output", None)
 
-    return _envelope(name, True, output, "ok", [])
+    def _output_errors(out):
+        e = validate_against_schema(out, contract["output_schema"])
+        if validate_output:
+            e = e + validate_output(args, out)
+        return e
+
+    errs = _output_errors(output)
+    repairs = 0
+    while errs and repair_output and repairs < max_output_repairs:
+        output = repair_output(args, output, errs)
+        repairs += 1
+        errs = _output_errors(output)
+
+    if errs:
+        env = _envelope(name, False, output, "output_validation", errs)
+        env["repairs"] = repairs
+        return env
+
+    env = _envelope(name, True, output, "ok", [])
+    env["repairs"] = repairs
+    return env

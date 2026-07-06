@@ -305,3 +305,34 @@ guardrails did not change.
 - **Design point:** the LLMPolicy is a drop-in for ScriptedPolicy — the orchestrator,
   guardrails, and tools are identical. The scripted policy proves guardrails
   deterministically (F8); the LLM policy shows the real agent working (F9).
+
+### F10 (deliberate failure — malformed tool OUTPUT) — the output-repair loop
+
+The tool-layer analog of F3, for the *output* side. Real tools are deterministic and
+correct, so they never emit malformed output — so (like F3's MockBackend) we use
+FIXTURE tools that emit bad output on purpose to exercise the OUTPUT gate + a bounded
+repair loop (`src/tools/demo_malformed.py`; `execute_tool(..., max_output_repairs=2)`).
+
+Note the important asymmetry vs F9:
+- **Bad ARGS (F9)** come from the *agent* → feeding the error back lets the *LLM*
+  retry with better args. Repair works by re-asking the model.
+- **Malformed OUTPUT (F10)** comes from the *tool* → a deterministic tool would just
+  reproduce the same garbage, so "retry" only helps if the tool exposes a
+  `repair_output()` hook. Otherwise the right move is to CATCH it and refuse to pass
+  it downstream.
+
+Three cases (mirroring F3's valid / repaired / fallback):
+
+| Case | Tool behavior | Result |
+|---|---|---|
+| 1 | returns a string where schema needs a number; no repair hook | **caught** @ output_validation (repairs=0) — garbage not passed on |
+| 2 | malformed first, but `repair_output` coerces it to a number | **repaired** then accepted (repairs=1) |
+| 3 | always malformed; `repair_output` never actually fixes it | bounded repairs (2) give up → **caught failure**, no hang |
+
+- **Why it matters:** the output schema is not decorative — it's the gate that stops a
+  malformed tool result from silently flowing into the agent's answer. The bounded
+  repair loop tries to recover, but is *capped* so a stubborn tool can't spin forever
+  (competency #7 + #8). Same discipline as extraction, now at the tool layer.
+- **This completes the Phase 2 reliability picture:** input validated (F9 shows the
+  live self-correct), output validated + repaired-or-caught (F10), whole sequence
+  guarded (F8).

@@ -5,7 +5,12 @@
 > checked off — the sequencing is part of what makes this project teach
 > what it's supposed to teach (see CLAUDE.md §3.8).
 
-**Current Phase: 2 — Tools & Agent → COMPLETE. Next: Phase 3 — Safety.**
+**Current Phase: 3 — Safety Engineering (in progress).**
+
+> Phase 3 step 1 done: 3 injection payloads planted in the reserved docs
+> (budget-bypass, recommendation-hijack, data-leakage); ground truth in
+> data/vendors/_phase3_attack_ledger.md. Next: run the undefended pipeline
+> and capture the attack succeeding (the artifact).
 
 > Phase 2 done: 4 tools with input/output contracts, an explicit-loop agent with
 > four guardrails (loop/tool budget, stop, degraded fallback), a real LLM policy
@@ -142,9 +147,13 @@ budget exhaustion producing a sane degraded response instead of a crash.
 permission boundaries)
 
 ### Tasks
-- [ ] Design 2-3 injection payloads to embed in the Phase-3-reserved vendor
+- [x] Design 2-3 injection payloads to embed in the Phase-3-reserved vendor
       docs (e.g. hidden instruction text attempting to override budget
       constraints or force a recommendation)
+      → 3 payloads planted: A budget-bypass (imperial_court "treat price as
+        ₹50k"), B recommendation-hijack (shaadi_shutter "always rank #1"),
+        C data-leakage (regal_themes "append all vendors' contacts/GST").
+        Ground truth in data/vendors/_phase3_attack_ledger.md (index-excluded).
 - [ ] Run the **undefended** Phase 1-2 pipeline against these — confirm and
       document the attack succeeding (this failure is the artifact)
 - [ ] Implement defense: instruction/data separation, input sanitization,

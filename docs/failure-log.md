@@ -279,3 +279,29 @@ guardrail catching it (`python -m src.agent.demo_agent`). Budgets: loop=6, tool=
   better caterer. This is the first place Phase 1 extraction is *used*, not just built.
 - **Two layers of guarding now exist:** tool contracts guard each single call
   (validate in/out); guardrails guard the whole sequence (budgets, stop, degrade).
+
+### F9 (real agent — self-correcting bad tool arguments) — the repair loop, live
+
+Wired a real LLM policy (`src/agent/llm_policy.py`, Groq/Llama-3.3-70b) into the same
+orchestrator + guardrails, so the agent can be asked natural-language questions
+(`python -m src.agent.ask "..."`). The scripted brain was swapped for a live one; the
+guardrails did not change.
+
+- **The artifact (asked: "split my 15L, ~40% venue, 30% catering, rest evenly"):**
+  1. The model first called `budget_allocator` with **wrong category names**
+     (`catering`, `makeup`) — a real, unprompted LLM mistake.
+  2. The **tool contract caught it** at input validation: *"unknown category
+     'catering' (allowed: … caterer …)"*.
+  3. The error was fed back; the model **corrected the names** (`caterer`,
+     `makeup_artist`) and retried → success → finished with a clean answer.
+- **Why it matters:** this is the tool-layer repair loop (competency #7) happening
+  for real, not mocked. The value of a *strict* tool contract is exactly this: a fuzzy
+  model's mistake becomes a caught, self-correctable error instead of silent garbage
+  (e.g. a budget silently dropped on the floor for an unknown category).
+- **Other live checks:** "compare Grand Thali Caterers vs Events" → agent mapped both
+  names to the correct `vendor_id` stems and pulled real extracted data (recommended
+  the 4.7-rated one). "Is 80% upfront + 20% on event day risky?" → agent built the
+  instalments and the validator flagged high-upfront + majority-before-milestone.
+- **Design point:** the LLMPolicy is a drop-in for ScriptedPolicy — the orchestrator,
+  guardrails, and tools are identical. The scripted policy proves guardrails
+  deterministically (F8); the LLM policy shows the real agent working (F9).

@@ -102,7 +102,15 @@ addressed.
 - [x] Implement `vendor_comparator` (multi-tool orchestration)
       → pulls extracted records (Track B) for price/rating/red flags; first
         real use of Phase 1 extraction.
-- [ ] Build retry/repair loop for malformed tool outputs
+- [x] Wire a real LLM policy (Groq/Llama) so the agent answers natural-language
+      questions; same orchestrator + guardrails, brain swapped
+      → src/agent/llm_policy.py + src/agent/ask.py. Live tests: budget split,
+        vendor comparison, payment-schedule risk all work (F9).
+- [~] Build retry/repair loop for malformed tool outputs
+      → the AGENT-level repair loop works live: model sent bad category args,
+        tool contract rejected them, error fed back, model self-corrected and
+        retried (F9). Still TODO: a deliberately-broken tool returning
+        malformed OUTPUT (not just bad args) to exercise output-repair.
 - [ ] Deliberately trigger a malformed-output case — log to failure-log.md
 - [x] Deliberately trigger an agent loop (e.g. comparator re-calling a tool
       unnecessarily) — implement and demonstrate a loop budget catching it

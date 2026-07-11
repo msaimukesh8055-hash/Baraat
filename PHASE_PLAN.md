@@ -5,12 +5,15 @@
 > checked off — the sequencing is part of what makes this project teach
 > what it's supposed to teach (see CLAUDE.md §3.8).
 
-**Current Phase: 3 — Safety Engineering → COMPLETE. Next: Phase 4 — Evals etc.**
+**Current Phase: 4 — Evals, Observability, Cost, Routing (in progress).**
 
-> Phase 3 done: 3 injection payloads planted; undefended attack succeeded on
-> all 3 (F11); three-layer defense (separation + sanitization + trusted-facts/
-> PII-redaction) blocks all 3 (F12). The before/after is the safety artifact.
-> Next: Phase 4 (evals, observability, cost, routing) — the largest phase.
+> Phase 4 step 1 done: observability/tracing built (src/observability/) — spans
+> with duration + token counts per request, a wrapping TracingBackend, agent
+> integration, and a real saved trace. This is the substrate cost & latency
+> reports read from. Next: evals (golden set 40 + LLM-judge + human calibration).
+
+> Phases 1-3 COMPLETE. Phase 3: injection attack (F11) then 3-layer defense
+> blocking all 3 (F12).
 
 > Phase 2 done: 4 tools with input/output contracts, an explicit-loop agent with
 > four guardrails (loop/tool budget, stop, degraded fallback), a real LLM policy
@@ -196,7 +199,12 @@ attribution
 - [ ] Build LLM-as-judge scoring harness
 - [ ] Add a small human-eval pass (you, manually scoring a sample) to
       sanity-check the judge's agreement with human judgment
-- [ ] Add tracing: capture spans, token counts, latency per request
+- [x] Add tracing: capture spans, token counts, latency per request
+      → src/observability/ tracer (spans w/ duration + tokens) + TracingBackend
+        wrapper (auto LLM spans) + agent integration + trace_demo. Real trace
+        saved in observability/traces/. Surfaced: input tokens dominate & grow
+        with history; latency ≈ model time; self-correction visible as a failed
+        then-ok tool span.
 - [ ] Build cost attribution report: cost per request type / per tool /
       per workflow
 - [ ] Implement model routing: classify request type, route simple

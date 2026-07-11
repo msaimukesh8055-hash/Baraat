@@ -20,6 +20,7 @@ from dataclasses import dataclass, field
 import json
 
 from ..tools.base import execute_tool
+from ..observability.tracer import NullTracer
 
 LOOP_BUDGET = 6   # max think->act iterations
 TOOL_BUDGET = 5   # max tool invocations per request
@@ -51,11 +52,13 @@ class AgentResult:
 
 
 class Agent:
-    def __init__(self, tools: dict, policy, loop_budget=LOOP_BUDGET, tool_budget=TOOL_BUDGET):
+    def __init__(self, tools: dict, policy, loop_budget=LOOP_BUDGET,
+                 tool_budget=TOOL_BUDGET, tracer=None):
         self.tools = tools                    # name -> tool module
         self.policy = policy
         self.loop_budget = loop_budget
         self.tool_budget = tool_budget
+        self.tracer = tracer or NullTracer()  # no-op unless a real tracer is passed
 
     def run(self, request: str) -> AgentResult:
         steps: list[Step] = []
@@ -63,7 +66,9 @@ class Agent:
         last_signature = None
 
         for _ in range(self.loop_budget):
-            action = self.policy(request, steps, self.tools)
+            # The LLM decision. The wrapped backend records the llm.* span inside.
+            with self.tracer.span("decide", kind="decide"):
+                action = self.policy(request, steps, self.tools)
 
             # STOP CONDITION: the policy says it's done.
             if action.type == "finish":
@@ -85,13 +90,15 @@ class Agent:
                                      f"stopped: tool budget of {self.tool_budget} calls reached")
 
             # Execute (the tool contract validates in/out; a bad call is a caught
-            # error envelope, never a crash).
+            # error envelope, never a crash). Recorded as a tool span.
             tool = self.tools.get(action.name)
-            if tool is None:
-                env = {"tool": action.name, "ok": False, "stage": "unknown_tool",
-                       "output": None, "errors": [f"no such tool: {action.name!r}"]}
-            else:
-                env = execute_tool(tool, action.args)
+            with self.tracer.span(f"tool.{action.name}", kind="tool") as sp:
+                if tool is None:
+                    env = {"tool": action.name, "ok": False, "stage": "unknown_tool",
+                           "output": None, "errors": [f"no such tool: {action.name!r}"]}
+                else:
+                    env = execute_tool(tool, action.args)
+                sp.set(ok=env["ok"], stage=env["stage"])
 
             tool_calls += 1
             steps.append(Step(action, env))

@@ -1,0 +1,152 @@
+{
+  "trace_id": "f1fba0ed4d5d",
+  "request": "I have 12 lakh for my wedding. Split it with about 45% for the venue and 30% for catering, and check if a payment plan of 80% upfront is risky.",
+  "created": "2026-07-11T11:22:37.688451+00:00",
+  "summary": {
+    "total_ms": 2656.37,
+    "llm_calls": 4,
+    "tool_calls": 3,
+    "tokens_in": 5402,
+    "tokens_out": 243,
+    "tokens_total": 5645
+  },
+  "spans": [
+    {
+      "name": "request",
+      "kind": "request",
+      "depth": 0,
+      "start_ms": 0.02,
+      "duration_ms": 2655.93,
+      "attrs": {},
+      "error": null
+    },
+    {
+      "name": "decide",
+      "kind": "decide",
+      "depth": 1,
+      "start_ms": 0.15,
+      "duration_ms": 802.78,
+      "attrs": {},
+      "error": null
+    },
+    {
+      "name": "llm.complete",
+      "kind": "llm",
+      "depth": 2,
+      "start_ms": 0.87,
+      "duration_ms": 802.04,
+      "attrs": {
+        "model": "llama-3.3-70b-versatile",
+        "tokens_in": 1178,
+        "tokens_out": 63,
+        "latency_s": 0.802
+      },
+      "error": null
+    },
+    {
+      "name": "tool.budget_allocator",
+      "kind": "tool",
+      "depth": 1,
+      "start_ms": 803.06,
+      "duration_ms": 0.04,
+      "attrs": {
+        "ok": false,
+        "stage": "input_validation"
+      },
+      "error": null
+    },
+    {
+      "name": "decide",
+      "kind": "decide",
+      "depth": 1,
+      "start_ms": 803.12,
+      "duration_ms": 706.66,
+      "attrs": {},
+      "error": null
+    },
+    {
+      "name": "llm.complete",
+      "kind": "llm",
+      "depth": 2,
+      "start_ms": 803.54,
+      "duration_ms": 706.2,
+      "attrs": {
+        "model": "llama-3.3-70b-versatile",
+        "tokens_in": 1282,
+        "tokens_out": 63,
+        "latency_s": 0.706
+      },
+      "error": null
+    },
+    {
+      "name": "tool.budget_allocator",
+      "kind": "tool",
+      "depth": 1,
+      "start_ms": 1509.83,
+      "duration_ms": 0.17,
+      "attrs": {
+        "ok": true,
+        "stage": "ok"
+      },
+      "error": null
+    },
+    {
+      "name": "decide",
+      "kind": "decide",
+      "depth": 1,
+      "start_ms": 1510.03,
+      "duration_ms": 531.38,
+      "attrs": {},
+      "error": null
+    },
+    {
+      "name": "llm.complete",
+      "kind": "llm",
+      "depth": 2,
+      "start_ms": 1510.51,
+      "duration_ms": 530.86,
+      "attrs": {
+        "model": "llama-3.3-70b-versatile",
+        "tokens_in": 1414,
+        "tokens_out": 71,
+        "latency_s": 0.531
+      },
+      "error": null
+    },
+    {
+      "name": "tool.payment_schedule_validator",
+      "kind": "tool",
+      "depth": 1,
+      "start_ms": 2041.46,
+      "duration_ms": 0.07,
+      "attrs": {
+        "ok": true,
+        "stage": "ok"
+      },
+      "error": null
+    },
+    {
+      "name": "decide",
+      "kind": "decide",
+      "depth": 1,
+      "start_ms": 2041.54,
+      "duration_ms": 614.53,
+      "attrs": {},
+      "error": null
+    },
+    {
+      "name": "llm.complete",
+      "kind": "llm",
+      "depth": 2,
+      "start_ms": 2041.91,
+      "duration_ms": 614.12,
+      "attrs": {
+        "model": "llama-3.3-70b-versatile",
+        "tokens_in": 1528,
+        "tokens_out": 46,
+        "latency_s": 0.614
+      },
+      "error": null
+    }
+  ]
+}

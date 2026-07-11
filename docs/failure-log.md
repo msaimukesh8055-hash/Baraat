@@ -411,3 +411,35 @@ picked it. Fixing the id made B block. Lesson: **defense-in-depth only works if 
 layer is actually wired correctly; a silent lookup miss is itself a vulnerability.**
 (Also had to fix an over-crude attack-success checker that false-flagged B when Shaadi
 was merely *mentioned* first — automated red-team scoring needs care too.)
+
+---
+
+## Phase 4 — Evals, Observability, Cost, Routing
+
+### F13 (answer eval reveals document-level recall overstated retrieval quality)
+
+Built the answer stage (retrieve → compose) + LLM-as-judge and ran it on the 10 golden
+questions. **Mean answer-quality score = 0.85** (8 correct, 1 partial, 1 incorrect) —
+an honest number, not a fake 1.0. The 2 misses share one root cause worth its own entry.
+
+- **Q02 (partial):** "Where is Swad Sagar and what do they charge?" → answered the
+  location correctly but said "I don't have information on their charges."
+- **Q03 (incorrect):** "Any problems with Candid Frames' delivery?" → said "I don't have
+  that information," missing the planted buried red flag (4–5 month late delivery, lost
+  footage).
+- **Same root cause:** in BOTH, all 5 retrieved chunks came from the *correct vendor* —
+  but **not the chunk containing the specific fact** (the price paragraph / the complaint
+  paragraph). Duplicate-ish chunks from the same doc filled the 5 slots and crowded out
+  the answer-bearing chunk, which ranked below top-5.
+- **The insight (the real artifact):** Phase 1's **recall@k was DOCUMENT-level** — a
+  "hit" meant *a* chunk from the right doc appeared, not *the* chunk with the answer. So
+  recall@1 = 0.90 **overstated** true retrieval quality. Only the **answer-level eval**
+  (does the system actually answer correctly?) exposes this — a chunk from the right
+  vendor is not the same as the right chunk. This is the textbook case for why you grade
+  the ANSWER, not just retrieval.
+- **Candidate fixes (later):** vendor-level dedup before top-k (so 5 slots = 5 distinct
+  passages), chunk-level (not doc-level) gold marking in the golden set, or a larger k /
+  reranking tuned for passage diversity. Logged, not yet fixed (per §3.1).
+- **Note on the judge:** its per-question reasoning was sensible on all 10 (e.g. it
+  credited Q06/Q07 for flagging conflicting/stale prices) — but the judge is itself an
+  LLM; a human-calibration pass (checking judge-vs-human agreement) is the next task.

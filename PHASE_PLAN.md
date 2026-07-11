@@ -195,8 +195,15 @@ tradeoffs, #11 latency engineering, #12 LLM observability, #13 cost
 attribution
 
 ### Tasks
-- [ ] Finalize golden set to 30-40 questions per PRD.md §6 categories
-- [ ] Build LLM-as-judge scoring harness
+- [~] Finalize golden set to 30-40 questions per PRD.md §6 categories
+      → still 10; expansion drafted next for Saimukesh sign-off (he owns the
+        expected answers).
+- [x] Build LLM-as-judge scoring harness
+      → src/answer/generator.py (answer stage: retrieve→compose) +
+        src/evals/llm_judge.py (meaning-based grader) + answer_eval runner.
+        On the 10 questions: mean answer-quality = 0.85 (8 correct/1 partial/1
+        incorrect). Surfaced F13: document-level recall@k overstated retrieval
+        (right vendor, wrong chunk).
 - [ ] Add a small human-eval pass (you, manually scoring a sample) to
       sanity-check the judge's agreement with human judgment
 - [x] Add tracing: capture spans, token counts, latency per request

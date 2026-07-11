@@ -1,0 +1,48 @@
+{
+  "trace_id": "a01419aa676f",
+  "request": "What is the package price for Ever After Films?",
+  "created": "2026-07-11T12:35:10.136724+00:00",
+  "summary": {
+    "total_ms": 918.37,
+    "llm_calls": 1,
+    "tool_calls": 0,
+    "tokens_in": 653,
+    "tokens_out": 18,
+    "tokens_total": 671,
+    "est_cost_usd": 0.000399
+  },
+  "spans": [
+    {
+      "name": "request",
+      "kind": "request",
+      "depth": 0,
+      "start_ms": 285.43,
+      "duration_ms": 631.8,
+      "attrs": {},
+      "error": null
+    },
+    {
+      "name": "retrieval",
+      "kind": "step",
+      "depth": 1,
+      "start_ms": 285.5,
+      "duration_ms": 0.0,
+      "attrs": {},
+      "error": null
+    },
+    {
+      "name": "llm.complete",
+      "kind": "llm",
+      "depth": 1,
+      "start_ms": 292.92,
+      "duration_ms": 624.34,
+      "attrs": {
+        "model": "llama-3.3-70b-versatile",
+        "tokens_in": 653,
+        "tokens_out": 18,
+        "latency_s": 0.624
+      },
+      "error": null
+    }
+  ]
+}

@@ -80,10 +80,14 @@ class Tracer:
             self._depth -= 1
 
     def summary(self) -> dict:
+        from . import cost  # local import avoids any import-order concerns
         llm = [s for s in self.spans if s.kind == "llm"]
         tools = [s for s in self.spans if s.kind == "tool"]
         tin = sum(s.attrs.get("tokens_in", 0) for s in llm)
         tout = sum(s.attrs.get("tokens_out", 0) for s in llm)
+        est_cost = sum(cost.cost_usd(s.attrs.get("tokens_in", 0),
+                                     s.attrs.get("tokens_out", 0),
+                                     s.attrs.get("model", "")) for s in llm)
         return {
             "total_ms": _ms_since(self._t0),
             "llm_calls": len(llm),
@@ -91,6 +95,7 @@ class Tracer:
             "tokens_in": tin,
             "tokens_out": tout,
             "tokens_total": tin + tout,
+            "est_cost_usd": round(est_cost, 6),
         }
 
     def to_dict(self) -> dict:

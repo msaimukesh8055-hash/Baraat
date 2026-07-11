@@ -217,8 +217,12 @@ attribution
         saved in observability/traces/. Surfaced: input tokens dominate & grow
         with history; latency ≈ model time; self-correction visible as a failed
         then-ok tool span.
-- [ ] Build cost attribution report: cost per request type / per tool /
+- [x] Build cost attribution report: cost per request type / per tool /
       per workflow
+      → src/observability/cost.py (Groq published $/token rates) + cost baked
+        into every trace summary + cost_report.py grouping by request type.
+        Real numbers: answer/lookup $0.0004 (671 tok) vs agent+tools $0.0034
+        (5645 tok) — ~8.5x. Sets up routing (cheap lookups → small model).
 - [ ] Implement model routing: classify request type, route simple
       lookups to a smaller/faster model, route contract-risk analysis to a
       stronger model

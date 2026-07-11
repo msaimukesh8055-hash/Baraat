@@ -223,12 +223,19 @@ attribution
         into every trace summary + cost_report.py grouping by request type.
         Real numbers: answer/lookup $0.0004 (671 tok) vs agent+tools $0.0034
         (5645 tok) — ~8.5x. Sets up routing (cheap lookups → small model).
-- [ ] Implement model routing: classify request type, route simple
+- [x] Implement model routing: classify request type, route simple
       lookups to a smaller/faster model, route contract-risk analysis to a
       stronger model
-- [ ] Document the routing decision with real cost/accuracy tradeoff data
-- [ ] Implement and measure a fallback cascade (what happens if the
+      → src/agent/router.py (keyword classifier + Router). demo_router (offline):
+        38/40 -> 8b, 2 -> 70b; 87% cost saving vs all-70b. Known classifier miss
+        (Q35 comparison phrased without cue words).
+- [~] Document the routing decision with real cost/accuracy tradeoff data
+      → ADR 0003: cost (87% saving) + latency (8b ~30-40% faster TTFT) MEASURED;
+        accuracy comparison DEFERRED (hit Groq daily token cap) — honest gap.
+- [x] Implement and measure a fallback cascade (what happens if the
       primary model call fails or times out)
+      → Router fallback cascade; demo shows 8b failure -> auto fallback to 70b
+        (degrade, don't die). Deterministic, no API.
 - [ ] Document prompt caching vs semantic caching tradeoff as it applies
       (or explicitly doesn't apply) to this system, with reasoning
 - [x] Measure and report first-token latency and streaming behavior

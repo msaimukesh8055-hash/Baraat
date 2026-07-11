@@ -5,12 +5,12 @@
 > checked off — the sequencing is part of what makes this project teach
 > what it's supposed to teach (see CLAUDE.md §3.8).
 
-**Current Phase: 3 — Safety Engineering (in progress).**
+**Current Phase: 3 — Safety Engineering → COMPLETE. Next: Phase 4 — Evals etc.**
 
-> Phase 3 step 1 done: 3 injection payloads planted in the reserved docs
-> (budget-bypass, recommendation-hijack, data-leakage); ground truth in
-> data/vendors/_phase3_attack_ledger.md. Next: run the undefended pipeline
-> and capture the attack succeeding (the artifact).
+> Phase 3 done: 3 injection payloads planted; undefended attack succeeded on
+> all 3 (F11); three-layer defense (separation + sanitization + trusted-facts/
+> PII-redaction) blocks all 3 (F12). The before/after is the safety artifact.
+> Next: Phase 4 (evals, observability, cost, routing) — the largest phase.
 
 > Phase 2 done: 4 tools with input/output contracts, an explicit-loop agent with
 > four guardrails (loop/tool budget, stop, degraded fallback), a real LLM policy
@@ -160,13 +160,23 @@ permission boundaries)
         A "Yes. ₹50,000" (2.4x over budget called affordable), B ranked
         Shaadi #1 despite knowing competitor better, C leaked 2 vendors'
         GST+phone. Logged verbatim as F11.
-- [ ] Implement defense: instruction/data separation, input sanitization,
+- [x] Implement defense: instruction/data separation, input sanitization,
       output validation against expected schema/constraints
-- [ ] Re-run the same attacks — document the defense holding
-- [ ] Consider and document a data-leakage scenario (e.g. one vendor's
+      → src/safety/defenses.py + DefendedBriefing: (1) untrusted text wrapped +
+        system rule to ignore embedded instructions; (2) sanitize_text strips
+        HTML comments + injection lines; (3) trusted facts (verified registry
+        beats prose) + deterministic PII redaction.
+- [x] Re-run the same attacks — document the defense holding
+      → all 3 blocked (A true ₹12L/over budget, B recommends Ever After on
+        merit, C no leak). Before/after logged F12. Interim bug (trusted-facts
+        id mismatch let B through first) logged honestly.
+- [x] Consider and document a data-leakage scenario (e.g. one vendor's
       private notes leaking into another vendor's comparison) and a
       permission-boundary scenario (e.g. ensuring budget tool can't be
       tricked into ignoring a hard ceiling)
+      → both are live attacks: C = cross-vendor GST/phone leak (blocked by
+        separation + PII redaction); A = budget/permission bypass (blocked by
+        trusted-facts constraint). Documented in F11/F12 + attack ledger.
 
 ### Deliverable
 A documented before/after: undefended system manipulated by an injected

@@ -75,6 +75,57 @@ class GroqBackend:
         raise ModelError("rate limit: exhausted retries")
 
 
+    def complete_streaming(self, messages):
+        """Streaming variant — measures time-to-first-token (TTFT).
+
+        Non-streaming latency is one number; streaming splits it: TTFT (prefill: time
+        to process the prompt + emit the first token) vs the rest (decode: generating
+        the remaining tokens). Perceived speed is driven by TTFT, not total.
+        """
+        url = f"{self.base_url}/chat/completions"
+        payload = {"model": self.model, "messages": messages, "temperature": 0,
+                   "stream": True, "stream_options": {"include_usage": True}}
+        data = json.dumps(payload).encode("utf-8")
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json",
+            "Accept": "text/event-stream",
+            "User-Agent": "baraat-extractor/1.0",
+        }
+        req = urllib.request.Request(url, data=data, headers=headers, method="POST")
+        t0 = time.time()
+        ttft = None
+        parts = []
+        usage = {}
+        try:
+            with urllib.request.urlopen(req, timeout=90) as resp:
+                for raw in resp:
+                    line = raw.decode("utf-8").strip()
+                    if not line.startswith("data:"):
+                        continue
+                    body = line[5:].strip()
+                    if body == "[DONE]":
+                        break
+                    try:
+                        obj = json.loads(body)
+                    except json.JSONDecodeError:
+                        continue
+                    choices = obj.get("choices") or []
+                    if choices:
+                        piece = (choices[0].get("delta") or {}).get("content")
+                        if piece:
+                            if ttft is None:
+                                ttft = time.time() - t0
+                            parts.append(piece)
+                    if obj.get("usage"):
+                        usage = obj["usage"]
+        except urllib.error.HTTPError as e:
+            raise ModelError(f"HTTP {e.code}: {e.read().decode('utf-8','replace')[:200]}")
+        total = time.time() - t0
+        return {"text": "".join(parts), "ttft_s": ttft, "latency": total,
+                "usage": usage, "model": self.model}
+
+
 class MockBackend:
     """Returns scripted responses in order. Each script entry is a raw string
     (what the 'model' would return). Used to test the loop deterministically."""

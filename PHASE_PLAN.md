@@ -231,7 +231,11 @@ attribution
       primary model call fails or times out)
 - [ ] Document prompt caching vs semantic caching tradeoff as it applies
       (or explicitly doesn't apply) to this system, with reasoning
-- [ ] Measure and report first-token latency and streaming behavior
+- [x] Measure and report first-token latency and streaming behavior
+      → added streaming (complete_streaming) + latency_probe.py (TTFT, total,
+        prefill/decode, p50/p95 on both models). 8b: TTFT p50 305ms / p95 576ms.
+        70b: TTFT p50 428ms / p95 620ms. 8b ~30-40% faster to first token.
+        Note: hit Groq daily token cap (TPD 100k) during Phase 4 runs.
 
 ### Deliverable
 A cost/latency/accuracy report with real numbers, a working model router

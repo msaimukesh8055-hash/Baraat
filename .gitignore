@@ -25,6 +25,7 @@ chroma/
 # Eval/observability run outputs are versioned deliberately under
 # evals/results and observability/traces; ignore only loose scratch files
 *.tmp
+evals/results/answer_eval_partial.json
 .DS_Store
 
 # IDE

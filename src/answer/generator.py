@@ -16,14 +16,20 @@ GEN_SYSTEM = (
     "question using ONLY the vendor context provided. Rules:\n"
     "- Use only facts present in the context; do not invent prices, ratings, or GST "
     "numbers.\n"
-    "- If the answer is not in the context, say you don't have that information.\n"
+    "- For questions about PROBLEMS, COMPLAINTS, or RED FLAGS: if the context describes "
+    "specific problems, report them; if the context describes the vendor with no problems "
+    "or complaints mentioned, answer that NO red flags were found in the listing. Absence "
+    "of problems in the provided listing is a valid, confident answer — do NOT hedge with "
+    "'I don't have that information', and do NOT invent problems that aren't stated.\n"
+    "- For other specific facts (price, location, phone): if that fact is genuinely not in "
+    "the context, say you don't have that information (do not guess).\n"
     "- If prices look conflicting or dated, say so rather than picking one blindly.\n"
     "- Be concise and name the vendor you're talking about."
 )
 
 
 class AnswerGenerator:
-    def __init__(self, backend, k: int = 5):
+    def __init__(self, backend, k: int = 8):
         self.retriever = HybridRetriever()
         self.backend = backend
         self.k = k

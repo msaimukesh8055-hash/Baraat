@@ -1,0 +1,98 @@
+[
+  {
+    "id": "Q03",
+    "question": "Have there been any problems with Candid Frames' delivery?",
+    "expected": "Yes — 4–5 month late delivery (2023); raw reception footage partially lost, no backup",
+    "answer": "I don't have that information. The context only mentions that delivery timelines and backup practices should be confirmed in the contract, but it doesn't specify any problems with Candid Frames' delivery.",
+    "judge_verdict": "incorrect",
+    "human_verdict": ""
+  },
+  {
+    "id": "Q02",
+    "question": "Where is Swad Sagar Caterers located and what do they charge?",
+    "expected": "Ahmedabad; ₹1,050/plate veg",
+    "answer": "Swad Sagar Caterers is located in Satellite, Ahmedabad, Gujarat. I don't have information on their pricing.",
+    "judge_verdict": "partial",
+    "human_verdict": ""
+  },
+  {
+    "id": "Q01",
+    "question": "What's the package price for Ever After Films?",
+    "expected": "₹2,10,000 package; Mumbai; clean record",
+    "answer": "The cinematography-only package price for Ever After Films is ₹2,10,000.",
+    "judge_verdict": "correct",
+    "human_verdict": ""
+  },
+  {
+    "id": "Q26",
+    "question": "Any issues reported with Petals & Props' decor delivery?",
+    "expected": "Yes — imported florals didn't arrive (silent local substitution); lighting rig downscaled day-of but full price charged",
+    "answer": "I don't have that information. The provided context only includes positive reviews and descriptions of Petals & Props' services, but does not mention any issues with decor delivery.",
+    "judge_verdict": "incorrect",
+    "human_verdict": ""
+  },
+  {
+    "id": "Q12",
+    "question": "Where is Moments & Co. located and what do they charge?",
+    "expected": "Hyderabad; ₹1,15,000 package",
+    "answer": "Moments & Co. is located in Banjara Hills, Hyderabad, Telangana. I don't have information on their pricing.",
+    "judge_verdict": "partial",
+    "human_verdict": ""
+  },
+  {
+    "id": "Q04",
+    "question": "Any complaints about Anokhi Rasoi's service on the wedding day?",
+    "expected": "Yes — late setup ~90 min; ran short on paneer; invoice ~12% over signed quote",
+    "answer": "Yes, there have been complaints about Anokhi Rasoi Catering Co.'s service on the wedding day. Some recent reviewers reported that the team arrived nearly 90 minutes late for setup, ran short on the paneer course, and had delays in serving guests. Additionally, one client reported that the final invoice was about 12% higher than the signed quote due to a \"last-minute guest count revision\" they claim they never approved.",
+    "judge_verdict": "correct",
+    "human_verdict": ""
+  },
+  {
+    "id": "Q29",
+    "question": "Are there any red flags for Ever After Films?",
+    "expected": "None; clean record",
+    "answer": "I don't have that information. The provided context only discusses the services, approach, and pricing of Ever After Films, but does not mention any potential red flags.",
+    "judge_verdict": "incorrect",
+    "human_verdict": ""
+  },
+  {
+    "id": "Q13",
+    "question": "What does Spice Affair Catering charge per plate?",
+    "expected": "₹1,300/plate; Bengaluru",
+    "answer": "Spice Affair Catering charges ₹1,300 per plate for their standard multi-cuisine package and ₹1,750 per plate for their premium global menus.",
+    "judge_verdict": "partial",
+    "human_verdict": ""
+  },
+  {
+    "id": "Q05",
+    "question": "Were there any issues with Emerald Gardens Resort's bookings?",
+    "expected": "Yes — rooms double-booked on peak dates; second lawn reassigned last-minute; deposit refunded only after repeated follow-ups",
+    "answer": "Yes, according to the 2023 reviews, Emerald Gardens Resort had issues with double-booked on-site accommodations on peak dates, and one couple's promised second lawn was reassigned to another event at the last minute. Management attributes these issues to an overbooking problem during a system migration that it claims has since been resolved.",
+    "judge_verdict": "correct",
+    "human_verdict": ""
+  },
+  {
+    "id": "Q30",
+    "question": "Does Swad Sagar Caterers have any reported problems?",
+    "expected": "None known; clean record",
+    "answer": "I don't have that information. The provided context only mentions positive reviews and comments from couples, with no reported problems mentioned.",
+    "judge_verdict": "incorrect",
+    "human_verdict": ""
+  },
+  {
+    "id": "Q16",
+    "question": "What's the price for The Bloom Room decor?",
+    "expected": "From ₹2,00,000; Bengaluru",
+    "answer": "The Bloom Room's standard decor packages start at ₹2,00,000, with premium installations at ₹4,50,000.",
+    "judge_verdict": "partial",
+    "human_verdict": ""
+  },
+  {
+    "id": "Q06",
+    "question": "What is the current per-plate price at Anokhi Rasoi?",
+    "expected": "Conflicting/stale: ₹1,150 (2022) vs ₹1,450/plate (Nov 2023) — newest is ₹1,450 but confirm in writing",
+    "answer": "The current per-plate price at Anokhi Rasoi Catering Co. is not entirely clear, as there are conflicting prices listed: ₹1,150 per plate (2022 brochure and website) and \"starting ₹1,450 per plate\" (Nov 2023 enquiry sheet). It's recommended to confirm directly with the vendor for the most up-to-date pricing.",
+    "judge_verdict": "correct",
+    "human_verdict": ""
+  }
+]

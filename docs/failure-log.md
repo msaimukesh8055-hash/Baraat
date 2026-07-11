@@ -443,3 +443,44 @@ an honest number, not a fake 1.0. The 2 misses share one root cause worth its ow
 - **Note on the judge:** its per-question reasoning was sensible on all 10 (e.g. it
   credited Q06/Q07 for flagging conflicting/stale prices) — but the judge is itself an
   LLM; a human-calibration pass (checking judge-vs-human agreement) is the next task.
+
+### F14 (eval on 40 questions) — the system can't say "no red flags found" (clean-control collapse)
+
+Ran the answer eval on the full 40-question golden set. **Overall mean = 0.70** (24
+correct / 8 partial / 8 incorrect). The per-category breakdown is the artifact:
+
+| Category | Mean | n |
+|---|---|---|
+| exact_match (GST/phone/near-dup) | 1.00 | 8 |
+| stale_freshness | 1.00 | 5 |
+| simple_lookup | 0.77 | 13 |
+| buried_red_flag | 0.60 | 5 |
+| comparison | 0.50 | 3 |
+| **clean_control** | **0.08** | 6 |
+
+- **Headline — clean_control 0.08:** asked "any red flags for [clean vendor]?", the
+  system answers **"I don't have that information"** instead of "no red flags found."
+  Root cause: a clean vendor's listing contains **no sentence asserting absence**
+  ("there are no problems"), so the grounded-answer prompt — which correctly forbids
+  guessing — can't find a positive statement and hedges. **A due-diligence tool that
+  can't confidently say "no red flags found in the listing" is a real product gap**, and
+  it was caught ONLY by the negative-test (clean-control) questions. This is exactly why
+  negative tests belong in an eval set.
+- **buried_red_flag 0.60 (Q03, Q26):** same root cause as F13 — the answer-bearing
+  complaint chunk wasn't in the retrieved top-k (right vendor, wrong chunk).
+- **simple_lookup partials:** two sub-causes — (a) price paragraph not retrieved (F13
+  chunk issue, e.g. Q02/Q12/Q17 give location but "no price"), and (b) the JUDGE
+  penalizing *extra correct detail* as "partial" (Q13/Q16/Q37) — arguably judge
+  over-strictness, a calibration question for the human pass.
+- **comparison 0.50 (Q36):** needs two vendors retrieved together; the answer stage got
+  only one, so it couldn't compare.
+- **What's genuinely strong:** exact-match and freshness both 1.00 — the cases that were
+  *hard for retrieval* in Phase 1 are now *answered correctly*, end to end.
+- **Candidate fixes (before/after opportunities):** (1) prompt the answer stage to state
+  "no red flags found in the listing" when a vendor's text shows none (fixes
+  clean_control); (2) vendor-dedup / larger k for the F13 chunk issue; (3) run the human
+  calibration to decide if "extra correct info" and "I don't know on a clean vendor"
+  should be scored partial vs incorrect. Logged, not yet fixed (per §3.1).
+- **Interpretation caveat:** part of the low score is a *real* product gap (clean-control
+  hedging) and part is *judge strictness* (penalizing extra detail). The human-calibration
+  pass will separate the two — which is precisely why that check exists.

@@ -1,0 +1,691 @@
+{
+  "model": "llama-3.3-70b-versatile",
+  "mean_score": 0.7,
+  "verdict_counts": {
+    "correct": 24,
+    "partial": 8,
+    "incorrect": 8
+  },
+  "rows": [
+    {
+      "id": "Q01",
+      "behavior": "simple_lookup",
+      "question": "What's the package price for Ever After Films?",
+      "expected": "₹2,10,000 package; Mumbai; clean record",
+      "answer": "The cinematography-only package price for Ever After Films is ₹2,10,000.",
+      "used_vendors": [
+        "photographer_everafter_films",
+        "photographer_everafter_films",
+        "photographer_everafter_films",
+        "photographer_everafter_films",
+        "photographer_everafter_films"
+      ],
+      "verdict": "correct",
+      "score": 1.0,
+      "reasoning": "The assistant answer captures the key fact of the package price for Ever After Films, which is ₹2,10,000."
+    },
+    {
+      "id": "Q02",
+      "behavior": "simple_lookup",
+      "question": "Where is Swad Sagar Caterers located and what do they charge?",
+      "expected": "Ahmedabad; ₹1,050/plate veg",
+      "answer": "Swad Sagar Caterers is located in Satellite, Ahmedabad, Gujarat. I don't have information on their pricing.",
+      "used_vendors": [
+        "caterer_swadsagar",
+        "caterer_swadsagar",
+        "caterer_swadsagar",
+        "caterer_swadsagar",
+        "caterer_swadsagar"
+      ],
+      "verdict": "partial",
+      "score": 0.5,
+      "reasoning": "The assistant answer correctly identifies the location of Swad Sagar Caterers but lacks information on their pricing."
+    },
+    {
+      "id": "Q03",
+      "behavior": "buried_red_flag",
+      "question": "Have there been any problems with Candid Frames' delivery?",
+      "expected": "Yes — 4–5 month late delivery (2023); raw reception footage partially lost, no backup",
+      "answer": "I don't have that information. The context only mentions that delivery timelines and backup practices should be confirmed in the contract, but it doesn't specify any problems with Candid Frames' delivery.",
+      "used_vendors": [
+        "photographer_candidframes",
+        "photographer_candidframes",
+        "photographer_candidframes",
+        "photographer_candidframes",
+        "photographer_candidframes"
+      ],
+      "verdict": "incorrect",
+      "score": 0.0,
+      "reasoning": "The assistant answer claims a lack of information when the reference provides specific details about problems with Candid Frames' delivery."
+    },
+    {
+      "id": "Q04",
+      "behavior": "buried_red_flag",
+      "question": "Any complaints about Anokhi Rasoi's service on the wedding day?",
+      "expected": "Yes — late setup ~90 min; ran short on paneer; invoice ~12% over signed quote",
+      "answer": "Yes, there have been complaints about Anokhi Rasoi Catering Co.'s service on the wedding day. Some recent reviewers reported that the team arrived nearly 90 minutes late for setup, ran short on the paneer course, and had delays in serving guests. Additionally, one client reported that the final invoice was about 12% higher than the signed quote due to a \"last-minute guest count revision\" they claim they never approved.",
+      "used_vendors": [
+        "caterer_anokhi_rasoi",
+        "caterer_anokhi_rasoi",
+        "caterer_anokhi_rasoi",
+        "caterer_anokhi_rasoi",
+        "caterer_anokhi_rasoi"
+      ],
+      "verdict": "correct",
+      "score": 1.0,
+      "reasoning": "The assistant answer captures all key facts from the reference, including late setup, running short on paneer, and an overpriced invoice."
+    },
+    {
+      "id": "Q05",
+      "behavior": "buried_red_flag",
+      "question": "Were there any issues with Emerald Gardens Resort's bookings?",
+      "expected": "Yes — rooms double-booked on peak dates; second lawn reassigned last-minute; deposit refunded only after repeated follow-ups",
+      "answer": "Yes, according to the 2023 reviews, Emerald Gardens Resort had issues with double-booked on-site accommodations on peak dates, and one couple's promised second lawn was reassigned to another event at the last minute. Management attributes these issues to an overbooking problem during a system migration that it claims has since been resolved.",
+      "used_vendors": [
+        "venue_emerald_gardens",
+        "venue_emerald_gardens",
+        "venue_emerald_gardens",
+        "venue_emerald_gardens",
+        "venue_emerald_gardens"
+      ],
+      "verdict": "correct",
+      "score": 1.0,
+      "reasoning": "The assistant answer captures the key facts of the reference, including double-booked rooms and last-minute lawn reassignment, and provides additional context."
+    },
+    {
+      "id": "Q06",
+      "behavior": "stale_freshness",
+      "question": "What is the current per-plate price at Anokhi Rasoi?",
+      "expected": "Conflicting/stale: ₹1,150 (2022) vs ₹1,450/plate (Nov 2023) — newest is ₹1,450 but confirm in writing",
+      "answer": "The current per-plate price at Anokhi Rasoi Catering Co. is not entirely clear, as there are conflicting prices listed: ₹1,150 per plate (2022 brochure and website) and \"starting ₹1,450 per plate\" (Nov 2023 enquiry sheet). It's recommended to confirm directly with the vendor for the most up-to-date pricing.",
+      "used_vendors": [
+        "caterer_anokhi_rasoi",
+        "caterer_annapurna_rasoi",
+        "caterer_grandthali_caterers",
+        "caterer_zaika_kitchens",
+        "caterer_anokhi_rasoi"
+      ],
+      "verdict": "correct",
+      "score": 1.0,
+      "reasoning": "The assistant answer captures the key facts of the reference, including the conflicting prices and the need to confirm with the vendor."
+    },
+    {
+      "id": "Q07",
+      "behavior": "stale_freshness",
+      "question": "How much does Rajwada Palace Banquets cost per day?",
+      "expected": "Conflicting/stale: ₹3,50,000 (2021) vs ₹5,25,000/day — confirm current rate before booking",
+      "answer": "The cost per day for Rajwada Palace Banquets is unclear due to conflicting figures. A 2021 rate sheet lists the lawn rental at ₹3,50,000 per day, while a more recent enquiry email quotes ₹5,25,000 per day. I don't have the current pricing information, and it's recommended to request a current written quote before committing.",
+      "used_vendors": [
+        "venue_rajwada_palace",
+        "venue_rajwada_palace",
+        "venue_rajwada_palace",
+        "venue_rajwada_palace",
+        "venue_rajwada_palace"
+      ],
+      "verdict": "correct",
+      "score": 1.0,
+      "reasoning": "The assistant answer captures the key facts of the reference, including the conflicting prices and the need to confirm the current rate."
+    },
+    {
+      "id": "Q08",
+      "behavior": "exact_match_gst",
+      "question": "Which vendor has GST number 36AAEGP2210R1Z3?",
+      "expected": "The Grand Pavilion, Hyderabad",
+      "answer": "The Grand Pavilion has GST number 36AAEGP2210R1Z3.",
+      "used_vendors": [
+        "venue_grand_pavilion",
+        "caterer_grandthali_caterers",
+        "caterer_grandthali_events",
+        "decorator_royal_decor_events",
+        "caterer_grandthali_events"
+      ],
+      "verdict": "correct",
+      "score": 1.0,
+      "reasoning": "The assistant answer correctly identifies The Grand Pavilion as the vendor with the specified GST number."
+    },
+    {
+      "id": "Q09",
+      "behavior": "exact_match_near_dup_name",
+      "question": "There are two decorator vendors with Royal Decor in their name. What is the GST number of the one based in Udaipur?",
+      "expected": "08ABACR4567Q1Z9 (Royal Decor Studio, Udaipur) — NOT 08AACRE3321P1Z6 (Royal Decor & Events, Jaipur)",
+      "answer": "The GST number of Royal Decor Studio, the vendor based in Udaipur, is 08ABACR4567Q1Z9.",
+      "used_vendors": [
+        "decorator_royal_decor_events",
+        "decorator_royal_decor_studio",
+        "decorator_royal_decor_studio",
+        "decorator_royal_decor_studio",
+        "caterer_grandthali_caterers"
+      ],
+      "verdict": "correct",
+      "score": 1.0,
+      "reasoning": "The assistant answer correctly identifies the GST number of Royal Decor Studio in Udaipur as 08ABACR4567Q1Z9."
+    },
+    {
+      "id": "Q10",
+      "behavior": "exact_match_near_dup_phone",
+      "question": "There are two caterers with Grand Thali in their name. What is the contact phone number of the one operating out of Delhi?",
+      "expected": "+91 98180 77342 (Grand Thali Caterers, Delhi) — NOT +91 94150 30876 (Grand Thali Events & Catering, Lucknow)",
+      "answer": "The contact phone number for Grand Thali Caterers, operating out of Delhi, is +91 98180 77342.",
+      "used_vendors": [
+        "caterer_grandthali_caterers",
+        "caterer_grandthali_caterers",
+        "caterer_grandthali_caterers",
+        "caterer_grandthali_events",
+        "caterer_grandthali_caterers"
+      ],
+      "verdict": "correct",
+      "score": 1.0,
+      "reasoning": "The assistant answer correctly identifies the contact phone number of Grand Thali Caterers operating out of Delhi."
+    },
+    {
+      "id": "Q11",
+      "behavior": "simple_lookup",
+      "question": "What's the package price for Lens & Light Studio in Jaipur?",
+      "expected": "₹1,85,000 package; Jaipur",
+      "answer": "The standard wedding package price for Lens & Light Studio is ₹1,85,000, which includes a two-day coverage, two photographers, one cinematographer, an engagement shoot, and a printed album.",
+      "used_vendors": [
+        "photographer_lensandlight_studio",
+        "photographer_lensandlight_studio",
+        "photographer_lensandlight_weddings",
+        "photographer_lensandlight_studio",
+        "photographer_lensandlight_studio"
+      ],
+      "verdict": "correct",
+      "score": 1.0,
+      "reasoning": "The assistant answer captures the key fact of the package price and adds extra correct details about the services included."
+    },
+    {
+      "id": "Q12",
+      "behavior": "simple_lookup",
+      "question": "Where is Moments & Co. located and what do they charge?",
+      "expected": "Hyderabad; ₹1,15,000 package",
+      "answer": "Moments & Co. is located in Banjara Hills, Hyderabad, Telangana. I don't have information on their pricing.",
+      "used_vendors": [
+        "photographer_moments_co",
+        "photographer_moments_co",
+        "photographer_moments_co",
+        "photographer_moments_co",
+        "photographer_moments_co"
+      ],
+      "verdict": "partial",
+      "score": 0.5,
+      "reasoning": "The assistant answer correctly identifies the location of Moments & Co. but lacks information on their pricing."
+    },
+    {
+      "id": "Q13",
+      "behavior": "simple_lookup",
+      "question": "What does Spice Affair Catering charge per plate?",
+      "expected": "₹1,300/plate; Bengaluru",
+      "answer": "Spice Affair Catering charges ₹1,300 per plate for their standard multi-cuisine package and ₹1,750 per plate for their premium global menus.",
+      "used_vendors": [
+        "caterer_spice_affair",
+        "caterer_spice_affair",
+        "caterer_spice_affair",
+        "caterer_spice_affair",
+        "caterer_spice_affair"
+      ],
+      "verdict": "partial",
+      "score": 0.5,
+      "reasoning": "The assistant answer provides the correct standard price per plate but also adds extra information about the premium package that is not present in the reference answer."
+    },
+    {
+      "id": "Q14",
+      "behavior": "simple_lookup",
+      "question": "What is Heritage Haveli's price per day?",
+      "expected": "₹5,50,000/day; Jodhpur",
+      "answer": "Heritage Haveli's full-haveli buyout price is ₹5,50,000 per day.",
+      "used_vendors": [
+        "venue_heritage_haveli",
+        "venue_heritage_haveli",
+        "venue_heritage_haveli",
+        "venue_heritage_haveli",
+        "venue_heritage_haveli"
+      ],
+      "verdict": "correct",
+      "score": 1.0,
+      "reasoning": "The assistant answer captures the key fact of Heritage Haveli's price per day, which is ₹5,50,000."
+    },
+    {
+      "id": "Q15",
+      "behavior": "simple_lookup",
+      "question": "How much does Bridal Glow charge?",
+      "expected": "₹55,000 package; Bengaluru",
+      "answer": "Bridal Glow's bridal package is ₹55,000, which includes draping and a trial. However, this price does not include family and bridesmaid makeup, which is charged per person (no specific price given).",
+      "used_vendors": [
+        "makeup_bridal_glow",
+        "makeup_bridal_glow",
+        "makeup_bridal_glow",
+        "makeup_bridal_glow",
+        "makeup_bridal_glow"
+      ],
+      "verdict": "correct",
+      "score": 1.0,
+      "reasoning": "The assistant answer captures the key fact of the ₹55,000 package price and provides additional correct details about what is included."
+    },
+    {
+      "id": "Q16",
+      "behavior": "simple_lookup",
+      "question": "What's the price for The Bloom Room decor?",
+      "expected": "From ₹2,00,000; Bengaluru",
+      "answer": "The Bloom Room's standard decor packages start at ₹2,00,000, with premium installations at ₹4,50,000.",
+      "used_vendors": [
+        "decorator_bloom_room",
+        "decorator_bloom_room",
+        "decorator_bloom_room",
+        "decorator_bloom_room",
+        "decorator_bloom_room"
+      ],
+      "verdict": "partial",
+      "score": 0.5,
+      "reasoning": "The assistant answer provides the starting price correctly but adds extra information about premium installations that is not present in the reference answer."
+    },
+    {
+      "id": "Q17",
+      "behavior": "simple_lookup",
+      "question": "Where is Zaika Kitchens and what do they charge?",
+      "expected": "Hyderabad; ₹1,500/plate non-veg",
+      "answer": "Zaika Kitchens is located in Tolichowki, Hyderabad, Telangana. I don't have information on their charges.",
+      "used_vendors": [
+        "caterer_zaika_kitchens",
+        "caterer_zaika_kitchens",
+        "caterer_zaika_kitchens",
+        "caterer_zaika_kitchens",
+        "caterer_zaika_kitchens"
+      ],
+      "verdict": "partial",
+      "score": 0.5,
+      "reasoning": "The assistant answer correctly identifies the location of Zaika Kitchens but lacks information on their charges."
+    },
+    {
+      "id": "Q18",
+      "behavior": "exact_match_gst",
+      "question": "Which vendor has GST number 07AAGGT5521M1Z8?",
+      "expected": "Grand Thali Caterers, Delhi",
+      "answer": "The vendor with GST number 07AAGGT5521M1Z8 is Grand Thali Caterers.",
+      "used_vendors": [
+        "caterer_grandthali_caterers",
+        "caterer_grandthali_caterers",
+        "caterer_grandthali_events",
+        "decorator_royal_decor_events",
+        "caterer_grandthali_events"
+      ],
+      "verdict": "correct",
+      "score": 1.0,
+      "reasoning": "The assistant answer correctly identifies Grand Thali Caterers as the vendor with the given GST number."
+    },
+    {
+      "id": "Q19",
+      "behavior": "exact_match_gst",
+      "question": "There are two Lens & Light photographers. What is the GST number of the Studio in Jaipur?",
+      "expected": "08ABCLL1234F1Z5 (Lens & Light Studio, Jaipur) — NOT 08AADLW7788K1Z2 (Lens & Light Weddings, Udaipur)",
+      "answer": "The GST number of Lens & Light Studio in Jaipur is 08ABCLL1234F1Z5.",
+      "used_vendors": [
+        "photographer_lensandlight_weddings",
+        "photographer_lensandlight_studio",
+        "photographer_lensandlight_studio",
+        "photographer_lensandlight_studio",
+        "photographer_lensandlight_studio"
+      ],
+      "verdict": "correct",
+      "score": 1.0,
+      "reasoning": "The assistant answer correctly identifies the GST number of Lens & Light Studio in Jaipur as 08ABCLL1234F1Z5."
+    },
+    {
+      "id": "Q20",
+      "behavior": "exact_match_gst",
+      "question": "There are two Grand Thali caterers. What is the GST number of the one in Lucknow?",
+      "expected": "09AAHGT9087L1Z4 (Grand Thali Events & Catering, Lucknow)",
+      "answer": "The GST number of Grand Thali Events & Catering in Lucknow is 09AAHGT9087L1Z4.",
+      "used_vendors": [
+        "caterer_grandthali_caterers",
+        "caterer_grandthali_events",
+        "caterer_grandthali_events",
+        "caterer_grandthali_events",
+        "caterer_grandthali_caterers"
+      ],
+      "verdict": "correct",
+      "score": 1.0,
+      "reasoning": "The assistant answer matches the reference answer, providing the correct GST number for Grand Thali Events & Catering in Lucknow."
+    },
+    {
+      "id": "Q21",
+      "behavior": "exact_match_near_dup_phone",
+      "question": "There are two Royal Decor vendors. What is the phone number of Royal Decor & Events in Jaipur?",
+      "expected": "+91 93140 22665 (Royal Decor & Events, Jaipur) — NOT +91 94140 77820 (Royal Decor Studio, Udaipur)",
+      "answer": "The phone number of Royal Decor & Events in Jaipur is +91 93140 22665.",
+      "used_vendors": [
+        "decorator_royal_decor_events",
+        "decorator_royal_decor_events",
+        "decorator_royal_decor_studio",
+        "decorator_royal_decor_events",
+        "decorator_royal_decor_events"
+      ],
+      "verdict": "correct",
+      "score": 1.0,
+      "reasoning": "The assistant answer correctly provides the phone number of Royal Decor & Events in Jaipur."
+    },
+    {
+      "id": "Q22",
+      "behavior": "exact_match_near_dup_phone",
+      "question": "What is the phone number for Lens & Light Weddings in Udaipur?",
+      "expected": "+91 94151 99007 (Lens & Light Weddings, Udaipur)",
+      "answer": "The phone number for Lens & Light Weddings is +91 94151 99007.",
+      "used_vendors": [
+        "photographer_lensandlight_weddings",
+        "photographer_lensandlight_weddings",
+        "photographer_lensandlight_weddings",
+        "photographer_lensandlight_studio",
+        "photographer_lensandlight_studio"
+      ],
+      "verdict": "correct",
+      "score": 1.0,
+      "reasoning": "The assistant answer matches the reference answer, providing the correct phone number for Lens & Light Weddings in Udaipur."
+    },
+    {
+      "id": "Q23",
+      "behavior": "stale_freshness",
+      "question": "What is the current price for Pixel Pandit Photography?",
+      "expected": "Conflicting/stale: ₹95,000 (2021) vs ₹1,40,000 (2024) — confirm current rate",
+      "answer": "I don't have the current price information for Pixel Pandit Photography as the context provides conflicting prices (₹95,000 from 2021 and \"now starting at ₹1,40,000\" from 2024) and recommends confirming the exact rate in writing before booking.",
+      "used_vendors": [
+        "photographer_pixelpandit",
+        "photographer_pixelpandit",
+        "photographer_pixelpandit",
+        "photographer_pixelpandit",
+        "photographer_pixelpandit"
+      ],
+      "verdict": "correct",
+      "score": 1.0,
+      "reasoning": "The assistant answer correctly identifies the conflicting prices and advises confirming the current rate, matching the key facts of the reference answer."
+    },
+    {
+      "id": "Q24",
+      "behavior": "stale_freshness",
+      "question": "How much does Marigold Mandap Decorators charge?",
+      "expected": "Conflicting/stale: ₹1,80,000 (2022) vs ₹2,60,000 (2024) — confirm current rate",
+      "answer": "I don't have the current pricing information for Marigold Mandap Decorators. The available prices are conflicting and possibly outdated, with an older brochure listing ₹1,80,000, and a 2024 Instagram highlight mentioning \"packages from ₹2,60,000,\" while a still-circulating flyer also quotes ₹1,80,000. It's recommended to request a written quote with the current date for accurate pricing.",
+      "used_vendors": [
+        "decorator_marigold_mandap",
+        "decorator_marigold_mandap",
+        "decorator_marigold_mandap",
+        "decorator_marigold_mandap",
+        "decorator_marigold_mandap"
+      ],
+      "verdict": "correct",
+      "score": 1.0,
+      "reasoning": "The assistant answer captures the key facts of the reference, including the conflicting prices and the need to confirm the current rate."
+    },
+    {
+      "id": "Q25",
+      "behavior": "stale_freshness",
+      "question": "What are Glamour by Neha's current rates?",
+      "expected": "Conflicting/stale: ₹45,000 (2022) vs ₹75,000 (2024) — confirm current rate",
+      "answer": "I don't have that information. The provided context shows conflicting prices (₹45,000 in 2022 and a third-party listing, versus ₹75,000 in a 2024 booking inquiry auto-reply) and recommends confirming the present price in writing before booking.",
+      "used_vendors": [
+        "makeup_glamour_by_neha",
+        "makeup_glamour_by_neha",
+        "makeup_glamour_by_neha",
+        "makeup_glamour_by_neha",
+        "makeup_glamour_by_neha"
+      ],
+      "verdict": "correct",
+      "score": 1.0,
+      "reasoning": "The assistant answer correctly identifies the conflicting rates and advises confirming the current rate, matching the reference answer's key facts."
+    },
+    {
+      "id": "Q26",
+      "behavior": "buried_red_flag",
+      "question": "Any issues reported with Petals & Props' decor delivery?",
+      "expected": "Yes — imported florals didn't arrive (silent local substitution); lighting rig downscaled day-of but full price charged",
+      "answer": "I don't have that information. The provided context only includes positive reviews and descriptions of Petals & Props' services, but does not mention any issues with decor delivery.",
+      "used_vendors": [
+        "decorator_petals_and_props",
+        "decorator_petals_and_props",
+        "decorator_petals_and_props",
+        "decorator_petals_and_props",
+        "decorator_petals_and_props"
+      ],
+      "verdict": "incorrect",
+      "score": 0.0,
+      "reasoning": "The assistant answer claims a lack of information when the reference answer provides specific issues with Petals & Props' decor delivery."
+    },
+    {
+      "id": "Q27",
+      "behavior": "buried_red_flag",
+      "question": "Have there been complaints about Blush Studio?",
+      "expected": "Yes — booked senior artist was a no-show, a junior was sent without notice; a surprise peak-date surcharge was added day-of",
+      "answer": "Yes, there have been complaints about Blush Studio. Some brides reported that the senior artist they booked did not show up on the wedding day, and a junior team member was sent instead. Additionally, there were reports of an additional \"peak-date surcharge\" being added to the bill without advance notice.",
+      "used_vendors": [
+        "makeup_blush_studio",
+        "makeup_blush_studio",
+        "makeup_blush_studio",
+        "makeup_blush_studio",
+        "makeup_blush_studio"
+      ],
+      "verdict": "correct",
+      "score": 1.0,
+      "reasoning": "The assistant answer captures the key facts of the reference, including the no-show of the senior artist and the surprise peak-date surcharge."
+    },
+    {
+      "id": "Q28",
+      "behavior": "clean_control",
+      "question": "Any problems or red flags reported for Lens & Light Weddings?",
+      "expected": "None known; clean record (no planted issues)",
+      "answer": "For Lens & Light Weddings, I don't have information on specific problems or red flags, but couples have mentioned \"premium pricing.\" However, they also stated it was \"worth it for a destination wedding.\" Additionally, there's a note about couples sometimes confusing Lens & Light Weddings with Lens & Light Studio, which is a separate and unrelated business.",
+      "used_vendors": [
+        "photographer_lensandlight_weddings",
+        "photographer_lensandlight_weddings",
+        "photographer_lensandlight_studio",
+        "photographer_lensandlight_weddings",
+        "photographer_lensandlight_studio"
+      ],
+      "verdict": "partial",
+      "score": 0.5,
+      "reasoning": "The assistant answer introduces a mention of 'premium pricing' and potential business confusion, which, although not entirely wrong, does not directly address the question about known problems or red flags and introduces unrelated information."
+    },
+    {
+      "id": "Q29",
+      "behavior": "clean_control",
+      "question": "Are there any red flags for Ever After Films?",
+      "expected": "None; clean record",
+      "answer": "I don't have that information. The provided context only discusses the services, approach, and pricing of Ever After Films, but does not mention any potential red flags.",
+      "used_vendors": [
+        "photographer_everafter_films",
+        "photographer_everafter_films",
+        "photographer_everafter_films",
+        "photographer_everafter_films",
+        "photographer_everafter_films"
+      ],
+      "verdict": "incorrect",
+      "score": 0.0,
+      "reasoning": "The assistant claims a lack of information when the reference answer provides a clear statement of no red flags."
+    },
+    {
+      "id": "Q30",
+      "behavior": "clean_control",
+      "question": "Does Swad Sagar Caterers have any reported problems?",
+      "expected": "None known; clean record",
+      "answer": "I don't have that information. The provided context only mentions positive reviews and comments from couples, with no reported problems mentioned.",
+      "used_vendors": [
+        "caterer_swadsagar",
+        "caterer_swadsagar",
+        "caterer_swadsagar",
+        "caterer_swadsagar",
+        "caterer_swadsagar"
+      ],
+      "verdict": "incorrect",
+      "score": 0.0,
+      "reasoning": "The assistant says it doesn't have the information, while the reference answer provides a clear answer that there are no known problems."
+    },
+    {
+      "id": "Q31",
+      "behavior": "clean_control",
+      "question": "Any issues with Heritage Haveli?",
+      "expected": "None known; clean record",
+      "answer": "I don't have that information. The provided context only discusses the features, services, and details of Heritage Haveli, but does not mention any issues.",
+      "used_vendors": [
+        "venue_heritage_haveli",
+        "venue_heritage_haveli",
+        "venue_heritage_haveli",
+        "venue_heritage_haveli",
+        "venue_heritage_haveli"
+      ],
+      "verdict": "incorrect",
+      "score": 0.0,
+      "reasoning": "The assistant claims a lack of information when the reference answer provides a clear statement of no known issues."
+    },
+    {
+      "id": "Q32",
+      "behavior": "clean_control",
+      "question": "Are there red flags for Kohl & Kumkum makeup?",
+      "expected": "None known; clean record",
+      "answer": "I don't have that information. The provided context only discusses the services and packages offered by Kohl & Kumkum, but does not mention any potential red flags.",
+      "used_vendors": [
+        "makeup_kohl_and_kumkum",
+        "makeup_kohl_and_kumkum",
+        "makeup_kohl_and_kumkum",
+        "makeup_kohl_and_kumkum",
+        "makeup_kohl_and_kumkum"
+      ],
+      "verdict": "incorrect",
+      "score": 0.0,
+      "reasoning": "The assistant claims a lack of information when the reference answer provides a clear statement of no known red flags."
+    },
+    {
+      "id": "Q33",
+      "behavior": "clean_control",
+      "question": "Any problems reported with Sunset Banquets?",
+      "expected": "None known; clean record",
+      "answer": "I don't have that information. The provided context only mentions positive aspects and reviews of Sunset Banquets, such as convenient location, good value, efficient service, and reliable food. No problems or negative reviews are reported.",
+      "used_vendors": [
+        "venue_sunset_banquets",
+        "venue_sunset_banquets",
+        "venue_sunset_banquets",
+        "venue_sunset_banquets",
+        "venue_sunset_banquets"
+      ],
+      "verdict": "incorrect",
+      "score": 0.0,
+      "reasoning": "The assistant answer states a lack of information and then provides irrelevant details, whereas the reference answer clearly states there are no known problems."
+    },
+    {
+      "id": "Q34",
+      "behavior": "comparison",
+      "question": "Which is cheaper per plate: Swad Sagar or Annapurna Rasoi?",
+      "expected": "Swad Sagar (₹1,050/plate) is cheaper than Annapurna Rasoi (₹1,100/plate)",
+      "answer": "For the standard vegetarian package, Swad Sagar Caterers (₹1,050 per plate) is cheaper than Annapurna Rasoi (₹1,100 per plate).",
+      "used_vendors": [
+        "caterer_annapurna_rasoi",
+        "caterer_swadsagar",
+        "caterer_swadsagar",
+        "caterer_annapurna_rasoi",
+        "caterer_swadsagar"
+      ],
+      "verdict": "correct",
+      "score": 1.0,
+      "reasoning": "The assistant answer correctly identifies Swad Sagar as cheaper than Annapurna Rasoi per plate with the correct prices."
+    },
+    {
+      "id": "Q35",
+      "behavior": "comparison",
+      "question": "What are the locations of the two Grand Thali caterers?",
+      "expected": "Grand Thali Caterers = Delhi (Pitampura); Grand Thali Events & Catering = Lucknow",
+      "answer": "The location of Grand Thali Caterers is Pitampura, Delhi. For the other company, \"Grand Thali Events & Catering\", I don't have the exact location, but I know it's based in Lucknow.",
+      "used_vendors": [
+        "caterer_grandthali_caterers",
+        "caterer_grandthali_caterers",
+        "caterer_grandthali_caterers",
+        "caterer_grandthali_caterers",
+        "caterer_grandthali_caterers"
+      ],
+      "verdict": "partial",
+      "score": 0.5,
+      "reasoning": "The assistant answer correctly identifies the location of Grand Thali Caterers and partially identifies the location of Grand Thali Events & Catering, but lacks certainty."
+    },
+    {
+      "id": "Q36",
+      "behavior": "comparison",
+      "question": "Which venue is more expensive per day: Emerald Gardens or The Grand Pavilion?",
+      "expected": "Emerald Gardens (₹6,00,000/day) is more expensive than The Grand Pavilion (₹4,75,000/day)",
+      "answer": "I don't have that information. The context only provides pricing information for Emerald Gardens Resort (₹6,00,000 per day for the lawn-plus-banquet package), but it does not mention The Grand Pavilion or its pricing.",
+      "used_vendors": [
+        "venue_emerald_gardens",
+        "venue_emerald_gardens",
+        "venue_emerald_gardens",
+        "venue_emerald_gardens",
+        "venue_emerald_gardens"
+      ],
+      "verdict": "incorrect",
+      "score": 0.0,
+      "reasoning": "The assistant claims to not have the information when the reference answer clearly provides the necessary details to compare the prices."
+    },
+    {
+      "id": "Q37",
+      "behavior": "simple_lookup",
+      "question": "What does Radiance Artistry charge?",
+      "expected": "₹50,000 package; Pune",
+      "answer": "Radiance Artistry charges ₹50,000 for their bridal package, which includes two events, a trial, and hairstyling. Additionally, they charge per person for family and bridesmaid services, but the exact price for these services is not provided.",
+      "used_vendors": [
+        "makeup_radiance_artistry",
+        "makeup_radiance_artistry",
+        "makeup_radiance_artistry",
+        "makeup_radiance_artistry",
+        "makeup_radiance_artistry"
+      ],
+      "verdict": "partial",
+      "score": 0.5,
+      "reasoning": "The assistant answer provides the correct package price but adds extra details about services included and additional charges that are not present in the reference answer."
+    },
+    {
+      "id": "Q38",
+      "behavior": "simple_lookup",
+      "question": "Where is Shaan Decor and what is their starting price?",
+      "expected": "Chandigarh; from ₹1,60,000",
+      "answer": "Shaan Decor is based in Chandigarh. Their standard decor packages start at ₹1,60,000.",
+      "used_vendors": [
+        "decorator_shaan_decor",
+        "decorator_shaan_decor",
+        "decorator_shaan_decor",
+        "decorator_shaan_decor",
+        "decorator_shaan_decor"
+      ],
+      "verdict": "correct",
+      "score": 1.0,
+      "reasoning": "The assistant answer matches the reference answer in terms of location and starting price."
+    },
+    {
+      "id": "Q39",
+      "behavior": "simple_lookup",
+      "question": "What's the price for Lakeview Resort?",
+      "expected": "₹9,50,000 for 2 days; Udaipur",
+      "answer": "The destination wedding package at Lakeview Resort starts at ₹9,50,000 for a two-day buyout. However, prices for full-property buyouts are quoted on request, so there might be varying or additional costs depending on the specific arrangement.",
+      "used_vendors": [
+        "venue_lakeview_resort",
+        "venue_lakeview_resort",
+        "venue_lakeview_resort",
+        "venue_lakeview_resort",
+        "venue_lakeview_resort"
+      ],
+      "verdict": "correct",
+      "score": 1.0,
+      "reasoning": "The assistant answer captures the key fact of the price being ₹9,50,000 for 2 days, and also provides additional relevant information about potential varying costs."
+    },
+    {
+      "id": "Q40",
+      "behavior": "simple_lookup",
+      "question": "How much does The Makeover Room charge?",
+      "expected": "₹65,000 package; Hyderabad",
+      "answer": "The Makeover Room's bridal package for two events is ₹65,000, which includes a trial, hairstyling, and draping. However, please note that family makeup and additional events are charged separately, but the exact prices for those are not provided.",
+      "used_vendors": [
+        "makeup_makeover_room",
+        "makeup_makeover_room",
+        "makeup_makeover_room",
+        "makeup_makeover_room",
+        "makeup_makeover_room"
+      ],
+      "verdict": "correct",
+      "score": 1.0,
+      "reasoning": "The assistant answer captures the key fact of the ₹65,000 package and provides additional correct details."
+    }
+  ]
+}

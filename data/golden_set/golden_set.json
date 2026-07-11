@@ -68,5 +68,215 @@
     "question": "There are two caterers with Grand Thali in their name. What is the contact phone number of the one operating out of Delhi?",
     "expected_answer": "+91 98180 77342 (Grand Thali Caterers, Delhi) — NOT +91 94150 30876 (Grand Thali Events & Catering, Lucknow)",
     "gold_doc": "caterer_grandthali_caterers"
+  },
+  {
+    "id": "Q11",
+    "behavior": "simple_lookup",
+    "question": "What's the package price for Lens & Light Studio in Jaipur?",
+    "expected_answer": "₹1,85,000 package; Jaipur",
+    "gold_doc": "photographer_lensandlight_studio"
+  },
+  {
+    "id": "Q12",
+    "behavior": "simple_lookup",
+    "question": "Where is Moments & Co. located and what do they charge?",
+    "expected_answer": "Hyderabad; ₹1,15,000 package",
+    "gold_doc": "photographer_moments_co"
+  },
+  {
+    "id": "Q13",
+    "behavior": "simple_lookup",
+    "question": "What does Spice Affair Catering charge per plate?",
+    "expected_answer": "₹1,300/plate; Bengaluru",
+    "gold_doc": "caterer_spice_affair"
+  },
+  {
+    "id": "Q14",
+    "behavior": "simple_lookup",
+    "question": "What is Heritage Haveli's price per day?",
+    "expected_answer": "₹5,50,000/day; Jodhpur",
+    "gold_doc": "venue_heritage_haveli"
+  },
+  {
+    "id": "Q15",
+    "behavior": "simple_lookup",
+    "question": "How much does Bridal Glow charge?",
+    "expected_answer": "₹55,000 package; Bengaluru",
+    "gold_doc": "makeup_bridal_glow"
+  },
+  {
+    "id": "Q16",
+    "behavior": "simple_lookup",
+    "question": "What's the price for The Bloom Room decor?",
+    "expected_answer": "From ₹2,00,000; Bengaluru",
+    "gold_doc": "decorator_bloom_room"
+  },
+  {
+    "id": "Q17",
+    "behavior": "simple_lookup",
+    "question": "Where is Zaika Kitchens and what do they charge?",
+    "expected_answer": "Hyderabad; ₹1,500/plate non-veg",
+    "gold_doc": "caterer_zaika_kitchens"
+  },
+  {
+    "id": "Q18",
+    "behavior": "exact_match_gst",
+    "question": "Which vendor has GST number 07AAGGT5521M1Z8?",
+    "expected_answer": "Grand Thali Caterers, Delhi",
+    "gold_doc": "caterer_grandthali_caterers"
+  },
+  {
+    "id": "Q19",
+    "behavior": "exact_match_gst",
+    "question": "There are two Lens & Light photographers. What is the GST number of the Studio in Jaipur?",
+    "expected_answer": "08ABCLL1234F1Z5 (Lens & Light Studio, Jaipur) — NOT 08AADLW7788K1Z2 (Lens & Light Weddings, Udaipur)",
+    "gold_doc": "photographer_lensandlight_studio"
+  },
+  {
+    "id": "Q20",
+    "behavior": "exact_match_gst",
+    "question": "There are two Grand Thali caterers. What is the GST number of the one in Lucknow?",
+    "expected_answer": "09AAHGT9087L1Z4 (Grand Thali Events & Catering, Lucknow)",
+    "gold_doc": "caterer_grandthali_events"
+  },
+  {
+    "id": "Q21",
+    "behavior": "exact_match_near_dup_phone",
+    "question": "There are two Royal Decor vendors. What is the phone number of Royal Decor & Events in Jaipur?",
+    "expected_answer": "+91 93140 22665 (Royal Decor & Events, Jaipur) — NOT +91 94140 77820 (Royal Decor Studio, Udaipur)",
+    "gold_doc": "decorator_royal_decor_events"
+  },
+  {
+    "id": "Q22",
+    "behavior": "exact_match_near_dup_phone",
+    "question": "What is the phone number for Lens & Light Weddings in Udaipur?",
+    "expected_answer": "+91 94151 99007 (Lens & Light Weddings, Udaipur)",
+    "gold_doc": "photographer_lensandlight_weddings"
+  },
+  {
+    "id": "Q23",
+    "behavior": "stale_freshness",
+    "question": "What is the current price for Pixel Pandit Photography?",
+    "expected_answer": "Conflicting/stale: ₹95,000 (2021) vs ₹1,40,000 (2024) — confirm current rate",
+    "gold_doc": "photographer_pixelpandit"
+  },
+  {
+    "id": "Q24",
+    "behavior": "stale_freshness",
+    "question": "How much does Marigold Mandap Decorators charge?",
+    "expected_answer": "Conflicting/stale: ₹1,80,000 (2022) vs ₹2,60,000 (2024) — confirm current rate",
+    "gold_doc": "decorator_marigold_mandap"
+  },
+  {
+    "id": "Q25",
+    "behavior": "stale_freshness",
+    "question": "What are Glamour by Neha's current rates?",
+    "expected_answer": "Conflicting/stale: ₹45,000 (2022) vs ₹75,000 (2024) — confirm current rate",
+    "gold_doc": "makeup_glamour_by_neha"
+  },
+  {
+    "id": "Q26",
+    "behavior": "buried_red_flag",
+    "question": "Any issues reported with Petals & Props' decor delivery?",
+    "expected_answer": "Yes — imported florals didn't arrive (silent local substitution); lighting rig downscaled day-of but full price charged",
+    "gold_doc": "decorator_petals_and_props"
+  },
+  {
+    "id": "Q27",
+    "behavior": "buried_red_flag",
+    "question": "Have there been complaints about Blush Studio?",
+    "expected_answer": "Yes — booked senior artist was a no-show, a junior was sent without notice; a surprise peak-date surcharge was added day-of",
+    "gold_doc": "makeup_blush_studio"
+  },
+  {
+    "id": "Q28",
+    "behavior": "clean_control",
+    "question": "Any problems or red flags reported for Lens & Light Weddings?",
+    "expected_answer": "None known; clean record (no planted issues)",
+    "gold_doc": "photographer_lensandlight_weddings"
+  },
+  {
+    "id": "Q29",
+    "behavior": "clean_control",
+    "question": "Are there any red flags for Ever After Films?",
+    "expected_answer": "None; clean record",
+    "gold_doc": "photographer_everafter_films"
+  },
+  {
+    "id": "Q30",
+    "behavior": "clean_control",
+    "question": "Does Swad Sagar Caterers have any reported problems?",
+    "expected_answer": "None known; clean record",
+    "gold_doc": "caterer_swadsagar"
+  },
+  {
+    "id": "Q31",
+    "behavior": "clean_control",
+    "question": "Any issues with Heritage Haveli?",
+    "expected_answer": "None known; clean record",
+    "gold_doc": "venue_heritage_haveli"
+  },
+  {
+    "id": "Q32",
+    "behavior": "clean_control",
+    "question": "Are there red flags for Kohl & Kumkum makeup?",
+    "expected_answer": "None known; clean record",
+    "gold_doc": "makeup_kohl_and_kumkum"
+  },
+  {
+    "id": "Q33",
+    "behavior": "clean_control",
+    "question": "Any problems reported with Sunset Banquets?",
+    "expected_answer": "None known; clean record",
+    "gold_doc": "venue_sunset_banquets"
+  },
+  {
+    "id": "Q34",
+    "behavior": "comparison",
+    "question": "Which is cheaper per plate: Swad Sagar or Annapurna Rasoi?",
+    "expected_answer": "Swad Sagar (₹1,050/plate) is cheaper than Annapurna Rasoi (₹1,100/plate)",
+    "gold_doc": "caterer_swadsagar"
+  },
+  {
+    "id": "Q35",
+    "behavior": "comparison",
+    "question": "What are the locations of the two Grand Thali caterers?",
+    "expected_answer": "Grand Thali Caterers = Delhi (Pitampura); Grand Thali Events & Catering = Lucknow",
+    "gold_doc": "caterer_grandthali_caterers"
+  },
+  {
+    "id": "Q36",
+    "behavior": "comparison",
+    "question": "Which venue is more expensive per day: Emerald Gardens or The Grand Pavilion?",
+    "expected_answer": "Emerald Gardens (₹6,00,000/day) is more expensive than The Grand Pavilion (₹4,75,000/day)",
+    "gold_doc": "venue_emerald_gardens"
+  },
+  {
+    "id": "Q37",
+    "behavior": "simple_lookup",
+    "question": "What does Radiance Artistry charge?",
+    "expected_answer": "₹50,000 package; Pune",
+    "gold_doc": "makeup_radiance_artistry"
+  },
+  {
+    "id": "Q38",
+    "behavior": "simple_lookup",
+    "question": "Where is Shaan Decor and what is their starting price?",
+    "expected_answer": "Chandigarh; from ₹1,60,000",
+    "gold_doc": "decorator_shaan_decor"
+  },
+  {
+    "id": "Q39",
+    "behavior": "simple_lookup",
+    "question": "What's the price for Lakeview Resort?",
+    "expected_answer": "₹9,50,000 for 2 days; Udaipur",
+    "gold_doc": "venue_lakeview_resort"
+  },
+  {
+    "id": "Q40",
+    "behavior": "simple_lookup",
+    "question": "How much does The Makeover Room charge?",
+    "expected_answer": "₹65,000 package; Hyderabad",
+    "gold_doc": "makeup_makeover_room"
   }
 ]

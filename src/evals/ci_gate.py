@@ -16,6 +16,7 @@ import argparse
 import glob
 import json
 import sys
+import tempfile
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
@@ -49,7 +50,8 @@ def _make_regressed(base_path: str) -> str:
             r["score"], r["verdict"] = 0.0, "incorrect"
     scored = [r for r in d["rows"] if r["verdict"] != "error"]
     d["mean_score"] = round(sum(r["score"] for r in scored) / len(scored), 3)
-    out = RESULTS / "answer_eval_REGRESSED_demo.json"
+    # Throwaway artifact -> system temp dir, so the demo never litters the repo.
+    out = Path(tempfile.gettempdir()) / "baraat_answer_eval_REGRESSED_demo.json"
     out.write_text(json.dumps(d, indent=2, ensure_ascii=False))
     return str(out)
 

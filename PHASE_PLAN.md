@@ -5,15 +5,13 @@
 > checked off — the sequencing is part of what makes this project teach
 > what it's supposed to teach (see CLAUDE.md §3.8).
 
-**Current Phase: 4 — Evals, Observability, Cost, Routing (in progress).**
+**Current Phase: ALL 5 PHASES COMPLETE.**
 
-> Phase 4 step 1 done: observability/tracing built (src/observability/) — spans
-> with duration + token counts per request, a wrapping TracingBackend, agent
-> integration, and a real saved trace. This is the substrate cost & latency
-> reports read from. Next: evals (golden set 40 + LLM-judge + human calibration).
-
-> Phases 1-3 COMPLETE. Phase 3: injection attack (F11) then 3-layer defense
-> blocking all 3 (F12).
+> Phase 1 RAG core · Phase 2 tools+agent · Phase 3 safety (attack→defense) ·
+> Phase 4 evals/observability/cost/latency/routing · Phase 5 CI gate + decision
+> records + architecture + README. Failure log F1–F14. Known open gaps logged
+> honestly (buried-red-flag retrieval, 8b accuracy under daily cap, one classifier
+> misroute) rather than hidden — per CLAUDE.md §3.1.
 
 > Phase 2 done: 4 tools with input/output contracts, an explicit-loop agent with
 > four guardrails (loop/tool budget, stop, degraded fallback), a real LLM policy
@@ -236,8 +234,11 @@ attribution
       primary model call fails or times out)
       → Router fallback cascade; demo shows 8b failure -> auto fallback to 70b
         (degrade, don't die). Deterministic, no API.
-- [ ] Document prompt caching vs semantic caching tradeoff as it applies
+- [x] Document prompt caching vs semantic caching tradeoff as it applies
       (or explicitly doesn't apply) to this system, with reasoning
+      → ADR 0004: prompt caching = clear win (big stable prefix, no risk);
+        semantic caching = risky (staleness vs freshness ADR 0002) → not for
+        prices, at most short-TTL for stable facts.
 - [x] Measure and report first-token latency and streaming behavior
       → added streaming (complete_streaming) + latency_probe.py (TTFT, total,
         prefill/decode, p50/p95 on both models). 8b: TTFT p50 305ms / p95 576ms.
@@ -257,17 +258,24 @@ fine-tuning vs ICL vs RAG vs distillation (decision record), full project
 narrative
 
 ### Tasks
-- [ ] Build a script that runs the golden set and fails if score drops
+- [x] Build a script that runs the golden set and fails if score drops
       below a defined threshold
-- [ ] Deliberately introduce a regression and show the CI gate catching it
-- [ ] Write `/docs/decision-records/finetune-vs-rag-vs-icl.md` — a
+      → src/evals/ci_gate.py (gates latest eval result vs threshold, exits 0/1).
+- [x] Deliberately introduce a regression and show the CI gate catching it
+      → `--demo`: baseline 0.70 PASS; exact-match broken → 0.50 FAIL. CI blocks it.
+- [x] Write `/docs/decision-records/finetune-vs-rag-vs-icl.md` — a
       reasoned judgment call (not a build) on when each approach would be
       the right or wrong tool for Baraat specifically
-- [ ] Consolidate `/docs/failure-log.md` into a clean, readable narrative
+      → done: RAG+ICL right for changing/attributable facts; fine-tuning/
+        distillation deferred with clear triggers.
+- [x] Consolidate `/docs/failure-log.md` into a clean, readable narrative
       covering all phases
-- [ ] Write `/docs/architecture-diagram.md` (or actual diagram)
-- [ ] Write final `README.md` — public-facing story, written for a
+      → added F1–F14 index table at the top.
+- [x] Write `/docs/architecture-diagram.md` (or actual diagram)
+      → done (two-track + agent + safety + observability diagram).
+- [x] Write final `README.md` — public-facing story, written for a
       non-technical reader first, with links to deeper docs
+      → done.
 
 ### Deliverable
 The complete, interview-ready repo: working code, a clean commit history,

@@ -7,6 +7,27 @@
 
 ---
 
+## Index (the reasoning arc at a glance)
+
+| # | Phase | What broke / was proven | Type |
+|---|---|---|---|
+| F1 | 1 | Groq behind Cloudflare — 403 on Python's User-Agent | build bug |
+| F2 | 1 | Free-tier rate limit (429/min) → backoff + pacing + resumable | build bug |
+| F3 | 1 | Repair + fallback loop proven via deterministic mock | deliberate |
+| F4 | 1 | Over-eager red flag → schema-valid ≠ content-correct | content finding |
+| F5 | 1 | recall@5 saturated at 1.0 → switched to recall@1 / MRR | eval design |
+| F6 | 1 | Hybrid fixes GST; a shared word defeats near-dup disambiguation | retrieval |
+| F7 | 1 | Reranking = 0 gain for 34× cost → chosen NOT to ship | judgment (#15) |
+| F8 | 2 | Agent guardrails: runaway loop + budget exhaustion caught | deliberate |
+| F9 | 2 | Live agent self-corrects bad tool arguments (repair loop) | reliability |
+| F10 | 2 | Malformed tool OUTPUT caught + bounded-repair | deliberate |
+| F11 | 3 | Prompt injection SUCCEEDS undefended (all 3 vectors) | safety (attack) |
+| F12 | 3 | 3-layer defense BLOCKS all 3 attacks | safety (defense) |
+| F13 | 4 | Answer eval reveals doc-level recall overstated retrieval | eval finding |
+| F14 | 4 | Clean-control collapse (can't say "no red flags found") | eval finding |
+
+---
+
 ## Phase 1 — RAG Core
 
 ### F1 (build bug) — Groq behind Cloudflare: HTTP 403 "error 1010" from Python
